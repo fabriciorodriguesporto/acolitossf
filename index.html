@@ -1,0 +1,855 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f6f3">
+  <title>Acólitos São Francisco</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #202b26;
+      --muted: #6b756f;
+      --line: #e2e7e2;
+      --paper: #fff;
+      --page: #f5f6f3;
+      --green: #355b48;
+      --green-dark: #294638;
+      --green-soft: #edf3ee;
+      --amber: #f6f1e7;
+      --danger: #a53d35;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-synthesis: none;
+      text-rendering: optimizeLegibility;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--page);
+      color: var(--ink);
+      line-height: 1.5;
+    }
+
+    button, input { font: inherit; }
+    button {
+      cursor: pointer;
+      transition: background-color .18s ease, color .18s ease, border-color .18s ease, box-shadow .18s ease;
+    }
+    button:active {
+      background-color: #dbeafe !important;
+      border-color: #60a5fa !important;
+      color: #1d4ed8 !important;
+      box-shadow: 0 0 0 3px rgba(59,130,246,.16);
+    }
+    button:focus-visible { outline: 2px solid #60a5fa; outline-offset: 2px; }
+    @media (prefers-reduced-motion: reduce) {
+      button { transition: none; }
+    }
+
+    .shell { width: min(100% - 40px, 920px); margin: 0 auto; }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 27px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .brand { display: flex; align-items: center; gap: 13px; }
+    .brand-logo { width: 44px; height: 56px; flex: 0 0 auto; object-fit: cover; border-radius: 50%; }
+    .brand-name { margin: 0; font-size: 19px; font-weight: 650; letter-spacing: -.025em; }
+    .brand-caption { margin: 1px 0 0; color: var(--muted); font-size: 12px; }
+
+    .nav { display: flex; gap: 5px; }
+    .nav button {
+      padding: 9px 14px;
+      color: var(--muted);
+      background: transparent;
+      border: 0;
+      border-radius: 8px;
+      font-size: 14px;
+    }
+    .nav button[aria-current="page"] { color: var(--green-dark); background: var(--green-soft); font-weight: 600; }
+
+    main { padding: 32px 0 64px; }
+    .page-heading { margin: 0 0 18px; font-size: 21px; font-weight: 620; letter-spacing: -.025em; }
+    .intro { margin: -10px 0 25px; color: var(--muted); font-size: 14px; }
+
+    .next-card {
+      overflow: hidden;
+      padding: 27px 30px 29px;
+      color: #fff;
+      background: var(--green);
+      border-radius: 12px;
+    }
+    .eyebrow { margin: 0 0 12px; font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; opacity: .8; }
+    .next-date { margin: 0; font-size: clamp(24px, 4vw, 32px); font-weight: 620; letter-spacing: -.035em; }
+    .next-time { margin: 4px 0 22px; color: #e2ede5; font-size: 15px; }
+    .team-title { margin: 0 0 11px; font-size: 13px; font-weight: 600; }
+    .team-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(185px, 1fr)); gap: 8px; }
+    .team-person {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px 12px;
+      color: #fff;
+      background: rgba(255,255,255,.1);
+      border-radius: 7px;
+      font-size: 13px;
+    }
+    .team-role { color: #dce8df; text-align: right; }
+    .unassigned { margin: 0; color: #e2ede5; font-size: 14px; }
+
+    .schedule-section { margin-top: 37px; }
+    .section-heading {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 13px;
+    }
+    .section-heading h2 { margin: 0; font-size: 17px; font-weight: 620; letter-spacing: -.015em; }
+    .section-heading span { color: var(--muted); font-size: 12px; }
+    .mass-list { display: grid; gap: 9px; }
+    .mass-entry {
+      overflow: hidden;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 9px;
+    }
+    .mass-row {
+      display: flex;
+      width: 100%;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 15px 17px;
+      color: inherit;
+      background: transparent;
+      border: 0;
+      text-align: left;
+      font: inherit;
+    }
+    .mass-row:hover { background: #f8faf8; }
+    .mass-row:focus-visible { outline: 2px solid #72917c; outline-offset: -3px; }
+    .mass-date { margin: 0; font-size: 14px; font-weight: 600; }
+    .mass-meta { display: block; margin: 3px 0 0; color: var(--muted); font-size: 12px; }
+    .expand-indicator { flex: 0 0 9px; width: 9px; height: 9px; margin-right: 3px; border-right: 1.5px solid var(--muted); border-bottom: 1.5px solid var(--muted); transform: rotate(45deg) translateY(-2px); transition: transform .15s ease; }
+    .mass-row[aria-expanded="true"] .expand-indicator { transform: rotate(225deg) translate(-2px, -1px); }
+    .mass-detail { display: grid; gap: 7px; padding: 11px 17px 14px; border-top: 1px solid var(--line); }
+    .mass-detail[hidden] { display: none; }
+    .mass-detail-item { display: flex; justify-content: space-between; gap: 12px; font-size: 13px; }
+    .mass-detail-role { color: var(--muted); text-align: right; }
+    .mass-detail-empty { margin: 0; color: var(--muted); font-size: 13px; }
+    .empty-note { margin: 0; padding: 19px; color: var(--muted); background: var(--paper); border: 1px solid var(--line); border-radius: 9px; font-size: 14px; }
+
+    .admin-grid { display: grid; gap: 16px; }
+    .panel {
+      padding: 21px 22px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+    }
+    .login-panel { width: min(100%, 430px); margin: 20px auto 0; }
+    .login-form { display: grid; gap: 13px; margin-top: 18px; }
+    .login-form .button { width: 100%; }
+    .login-error { min-height: 20px; margin: 0; color: var(--danger); font-size: 13px; }
+    .admin-heading-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .admin-heading-row .page-heading { margin: 0; }
+    .admin-heading-row { margin-bottom: 8px; }
+    .panel h2 { margin: 0; font-size: 16px; font-weight: 620; }
+    .panel-description { margin: 5px 0 17px; color: var(--muted); font-size: 13px; }
+    .form-row { display: flex; align-items: end; gap: 9px; }
+    .field { display: grid; flex: 1; gap: 6px; min-width: 0; }
+    .field label { color: #4e5952; font-size: 12px; font-weight: 600; }
+    .field input {
+      width: 100%;
+      min-height: 41px;
+      padding: 9px 11px;
+      color: var(--ink);
+      background: #fff;
+      border: 1px solid #d5ddd6;
+      border-radius: 7px;
+      outline: none;
+    }
+    .field input:focus { border-color: #72917c; box-shadow: 0 0 0 3px rgba(53,91,72,.1); }
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 40px;
+      padding: 8px 13px;
+      color: var(--green-dark);
+      background: #fff;
+      border: 1px solid #cbd6cd;
+      border-radius: 7px;
+      font-size: 13px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .button:hover { background: #f7faf7; }
+    .button-primary { color: #fff; background: var(--green); border-color: var(--green); }
+    .button-primary:hover { background: var(--green-dark); }
+    .button-danger { color: var(--danger); border-color: #ead2d0; }
+    .button-small { min-height: 32px; padding: 5px 9px; font-size: 12px; }
+    .member-list { display: grid; gap: 7px; margin: 15px 0 0; padding: 0; list-style: none; }
+    .member-item { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 9px 0; border-top: 1px solid #edf0ed; }
+    .member-name { font-size: 14px; }
+    .member-actions { display: flex; gap: 6px; }
+    .member-count { color: var(--muted); font-size: 12px; }
+    .admin-actions { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-top: 15px; }
+    .admin-actions p { margin: 0; color: var(--muted); font-size: 12px; }
+    .admin-events { display: grid; gap: 9px; margin-top: 17px; }
+    .admin-event { overflow: hidden; border: 1px solid var(--line); border-radius: 8px; }
+    .admin-event-toggle { display: flex; width: 100%; align-items: center; justify-content: space-between; gap: 12px; padding: 13px 14px; color: var(--ink); background: var(--paper); border: 0; text-align: left; font: inherit; }
+    .admin-event-toggle:hover { background: #f8faf8; }
+    .admin-event-summary { min-width: 0; }
+    .admin-event-details { padding: 0 14px 14px; }
+    .admin-event-details[hidden] { display: none; }
+    .admin-event-name { margin: 0; font-size: 13px; font-weight: 600; }
+    .admin-event-form { display: grid; grid-template-columns: repeat(2, minmax(140px, 1fr)); gap: 10px; margin-top: 10px; }
+    .admin-event-form input { min-height: 36px; font-size: 13px; }
+    .admin-event-assignments { display: grid; grid-column: 1 / -1; gap: 10px; margin-top: 13px; }
+    .admin-assignment-row { display: grid; grid-template-columns: minmax(150px, .7fr) minmax(180px, 1fr); gap: 10px; }
+    .admin-assignment-row select { width: 100%; min-height: 36px; padding: 7px 9px; color: var(--ink); background: #fff; border: 1px solid #d5ddd6; border-radius: 7px; font: inherit; font-size: 13px; }
+    .notice { margin: 0 0 16px; padding: 11px 13px; color: #65532e; background: var(--amber); border-radius: 7px; font-size: 13px; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+
+    @media (max-width: 600px) {
+      .shell { width: min(100% - 28px, 920px); }
+      .topbar { align-items: flex-start; flex-direction: column; padding: 19px 0 13px; gap: 13px; }
+      .nav { width: 100%; }
+      .nav button { flex: 1; }
+      main { padding-top: 24px; }
+      .next-card { padding: 23px 19px; }
+      .mass-row { align-items: flex-start; padding: 13px; }
+      .mass-detail { padding: 10px 13px 12px; }
+      .form-row { align-items: stretch; flex-direction: column; }
+      .form-row .button { width: 100%; }
+      .panel { padding: 18px 16px; }
+      .admin-heading-row { align-items: flex-start; }
+      .admin-assignment-row { grid-template-columns: 1fr; gap: 8px; }
+      .admin-actions { align-items: stretch; flex-direction: column; }
+      .admin-actions .button { width: 100%; }
+      .admin-event-form { grid-template-columns: 1fr; }
+      .admin-event-form .button { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header class="topbar">
+      <div class="brand">
+        <img class="brand-logo" src="assets/sao-francisco-logo.png" alt="Imagem de São Francisco">
+        <div>
+          <p class="brand-name">Acólitos São Francisco</p>
+          <p class="brand-caption">Comunidade São Francisco</p>
+        </div>
+      </div>
+      <nav class="nav" aria-label="Navegação principal">
+        <button type="button" data-page="home" aria-current="page">Início</button>
+        <button type="button" data-page="admin">Administrador</button>
+      </nav>
+    </header>
+    <main id="app" tabindex="-1"></main>
+  </div>
+
+  <script>
+    (() => {
+      const STORAGE_KEY = "acolitos-sao-francisco-v1";
+      const FIRST_MASS_ROLES = ["Microfone", "Naveta", "Turíbulo"];
+      const SECOND_MASS_ROLES = ["Microfone", "Missal"];
+      const PDF_FIRST_GENERATION_ROTATION = [
+        { first: [0, 1, 2], second: [1, 2, 0] },
+        { first: [2, 0, 1], second: [0, 1, 2] },
+        { first: [1, 2, 0], second: [2, 0, 1] },
+        { first: [0, 2, 1], second: [2, 1, 0] },
+        { first: [2, 1, 0], second: [1, 0, 2] },
+        { first: [1, 0, 2], second: [0, 2, 1] }
+      ];
+      const PDF_ROTATION_MEMBER_NAMES = ["amanda", "fabricio", "brenda"];
+      const ADMIN_EMAIL = "admin@acolitos.com";
+      const ADMIN_PASSWORD = "adminacolitos";
+      const ADMIN_SESSION_KEY = "acolitos-admin-authenticated";
+      const defaultSettings = { secondSaturdayTime: "18:00", fourthSaturdayTime: "17:00" };
+      const app = document.querySelector("#app");
+      const navButtons = [...document.querySelectorAll("[data-page]")];
+      let currentPage = "home";
+      let isAdminAuthenticated = sessionStorage.getItem(ADMIN_SESSION_KEY) === "true";
+      let state;
+
+      const newId = () => window.crypto && crypto.randomUUID
+        ? crypto.randomUUID()
+        : `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+
+      function addMonths(date, amount) {
+        const result = new Date(date);
+        result.setMonth(result.getMonth() + amount);
+        return result;
+      }
+
+      function localDateString(date) {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, "0");
+        const day = String(date.getDate()).padStart(2, "0");
+        return `${year}-${month}-${day}`;
+      }
+
+      function createUpcomingMasses(settings) {
+        const now = new Date();
+        const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        const events = [];
+        for (let offset = 0; offset < 6; offset += 1) {
+          const month = new Date(today.getFullYear(), today.getMonth() + offset, 1);
+          for (const [ordinal, time] of [[2, settings.secondSaturdayTime], [4, settings.fourthSaturdayTime]]) {
+            const firstDay = new Date(month.getFullYear(), month.getMonth(), 1);
+            const firstSaturday = 1 + ((6 - firstDay.getDay() + 7) % 7);
+            const date = new Date(month.getFullYear(), month.getMonth(), firstSaturday + (ordinal - 1) * 7);
+            if (date < today) continue;
+            events.push({
+              id: newId(),
+              date: localDateString(date),
+              time,
+              massType: ordinal === 2 ? "first" : "second",
+              assignments: []
+            });
+          }
+        }
+        return events.sort((a, b) => `${a.date}T${a.time}`.localeCompare(`${b.date}T${b.time}`));
+      }
+
+      function loadState() {
+        const stored = localStorage.getItem(STORAGE_KEY);
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          const settings = { ...defaultSettings, ...(parsed.settings || {}) };
+          const masses = Array.isArray(parsed.masses) ? parsed.masses.map(mass => {
+            const massType = mass.massType || inferMassType(mass.date, mass.time, settings);
+            const roles = rolesForMass({ ...mass, massType });
+            const assignments = Array.isArray(mass.assignments) ? mass.assignments : [];
+            const validAssignments = assignments.length === roles.length
+              && assignments.every(item => roles.includes(item.role));
+            return {
+              ...mass,
+              massType,
+              assignments: validAssignments ? assignments : []
+            };
+          }) : [];
+          return {
+            members: Array.isArray(parsed.members) ? parsed.members : [],
+            settings,
+            masses,
+            initialOrderApplied: parsed.initialOrderApplied === true
+          };
+        }
+        const initial = { members: [], settings: { ...defaultSettings }, masses: [], initialOrderApplied: false };
+        initial.masses = createUpcomingMasses(initial.settings);
+        return initial;
+      }
+
+      function inferMassType(dateString, time, settings) {
+        const [year, month, day] = dateString.split("-").map(Number);
+        const date = new Date(year, month - 1, day);
+        const saturdayOrdinal = Math.floor((day - 1) / 7) + 1;
+        if (date.getDay() === 6 && saturdayOrdinal === 2) return "first";
+        if (date.getDay() === 6 && saturdayOrdinal === 4) return "second";
+        return time === settings.secondSaturdayTime ? "first" : "second";
+      }
+
+      function rolesForMass(mass) {
+        return mass.massType === "first" ? FIRST_MASS_ROLES : SECOND_MASS_ROLES;
+      }
+
+      function generatePdfFirstAssignments(masses, members) {
+        if (members.length !== PDF_ROTATION_MEMBER_NAMES.length) return null;
+        const rotationMembers = PDF_ROTATION_MEMBER_NAMES.map(name => members.find(member =>
+          member.name.normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim().toLocaleLowerCase("pt-BR") === name
+        ));
+        if (rotationMembers.some(member => !member)) return null;
+
+        return masses.map(mass => {
+          const [year, month] = mass.date.split("-").map(Number);
+          const monthOffset = ((year - 2026) * 12 + month - 6) % PDF_FIRST_GENERATION_ROTATION.length;
+          const rotation = PDF_FIRST_GENERATION_ROTATION[
+            (monthOffset + PDF_FIRST_GENERATION_ROTATION.length) % PDF_FIRST_GENERATION_ROTATION.length
+          ];
+          const order = rotation[mass.massType];
+          const roles = mass.massType === "first"
+            ? ["Turíbulo", "Naveta", "Microfone"]
+            : ["Missal", "Microfone"];
+          return roles.map((role, index) => ({
+            memberId: rotationMembers[order[index]].id,
+            role
+          }));
+        });
+      }
+
+      function saveState() {
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+          return true;
+        } catch (error) {
+          console.error("Não foi possível salvar os dados no navegador.", error);
+          window.alert("Não foi possível salvar os dados neste navegador. Verifique o espaço disponível e tente novamente.");
+          return false;
+        }
+      }
+
+      function escapeHtml(value) {
+        return String(value).replace(/[&<>"']/g, character => ({
+          "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+        })[character]);
+      }
+
+      function formatDate(dateString, options = {}) {
+        const [year, month, day] = dateString.split("-").map(Number);
+        return new Intl.DateTimeFormat("pt-BR", options).format(new Date(year, month - 1, day));
+      }
+
+      function futureMasses() {
+        const now = new Date();
+        return state.masses
+          .filter(mass => new Date(`${mass.date}T${mass.time}:00`) >= now)
+          .sort((a, b) => `${a.date}T${a.time}`.localeCompare(`${b.date}T${b.time}`));
+      }
+
+      function getMember(memberId) {
+        return state.members.find(member => member.id === memberId);
+      }
+
+      function renderHome() {
+        const events = futureMasses();
+        const next = events[0];
+        const assignments = next ? (next.assignments || []) : [];
+        const nextBlock = next
+          ? `<section class="next-card" aria-labelledby="next-heading">
+              <p class="eyebrow">Próxima missa</p>
+              <h1 class="next-date" id="next-heading">${escapeHtml(formatDate(next.date, { weekday: "long", day: "numeric", month: "long" }))}</h1>
+              <p class="next-time">${escapeHtml(next.time)} · Comunidade São Francisco</p>
+              <p class="team-title">Equipe escalada</p>
+              ${assignments.length
+                ? `<div class="team-list">${assignments.map(item => {
+                    const member = getMember(item.memberId);
+                    return member ? `<div class="team-person"><span>${escapeHtml(member.name)}</span><span class="team-role">${escapeHtml(item.role)}</span></div>` : "";
+                  }).join("")}</div>`
+                : `<p class="unassigned">Ainda não há equipe definida. A escala será exibida aqui após a geração pelo administrador.</p>`}
+            </section>`
+          : `<section class="next-card"><p class="eyebrow">Próxima missa</p><h1 class="next-date">Nenhuma missa cadastrada</h1><p class="next-time">Gere a escala na área do administrador.</p></section>`;
+        const rows = events.map(mass => {
+          const details = (mass.assignments || []).map(item => {
+            const member = getMember(item.memberId);
+            return member
+              ? `<div class="mass-detail-item"><span>${escapeHtml(member.name)}</span><span class="mass-detail-role">${escapeHtml(item.role)}</span></div>`
+              : "";
+          }).join("");
+          const detailId = `mass-detail-${mass.id}`;
+          return `<div class="mass-entry">
+            <button class="mass-row" type="button" data-toggle-mass aria-expanded="false" aria-controls="${escapeHtml(detailId)}">
+              <span><span class="mass-date">${escapeHtml(formatDate(mass.date, { weekday: "long", day: "numeric", month: "long" }))}</span><span class="mass-meta">Missa · ${escapeHtml(mass.time)}</span></span>
+              <span class="expand-indicator" aria-hidden="true"></span>
+            </button>
+            <div class="mass-detail" id="${escapeHtml(detailId)}" hidden>${details || `<p class="mass-detail-empty">Equipe a definir</p>`}</div>
+          </div>`;
+        }).join("");
+
+        app.innerHTML = `<h2 class="sr-only">Início</h2>
+          ${nextBlock}
+          <section class="schedule-section" aria-labelledby="schedule-heading">
+            <div class="section-heading"><h2 id="schedule-heading">Próximas missas</h2><span>Próximos 6 meses</span></div>
+            <div class="mass-list">${rows || `<p class="empty-note">Não há missas futuras. Confira as configurações na área do administrador.</p>`}</div>
+          </section>`;
+      }
+
+      function renderAdmin() {
+        const future = futureMasses();
+        const members = [...state.members].sort((a, b) => a.name.localeCompare(b.name, "pt-BR"));
+        const memberRows = members.length
+          ? members.map(member => `<li class="member-item">
+              <span class="member-name">${escapeHtml(member.name)}</span>
+              <div class="member-actions">
+                <button class="button button-small" type="button" data-edit-member="${escapeHtml(member.id)}">Editar</button>
+                <button class="button button-small button-danger" type="button" data-delete-member="${escapeHtml(member.id)}">Excluir</button>
+              </div>
+            </li>`).join("")
+          : `<li class="member-count">Nenhum acólito cadastrado.</li>`;
+
+        const eventRows = future.length
+          ? future.map(mass => {
+            const roles = rolesForMass(mass);
+            const assignments = mass.assignments || [];
+            const assignmentFields = roles.map((defaultRole, index) => {
+              const assignment = assignments[index];
+              const roleOptions = roles.map(role => `<option value="${escapeHtml(role)}"${role === (assignment ? assignment.role : defaultRole) ? " selected" : ""}>${escapeHtml(role)}</option>`).join("");
+              const memberOptions = members.map(member => `<option value="${escapeHtml(member.id)}"${assignment && assignment.memberId === member.id ? " selected" : ""}>${escapeHtml(member.name)}</option>`).join("");
+              return `<div class="admin-assignment-row">
+                <div class="field"><label for="role-${escapeHtml(mass.id)}-${index}">Função</label><select id="role-${escapeHtml(mass.id)}-${index}" name="role-${index}"><option value="">Selecione</option>${roleOptions}</select></div>
+                <div class="field"><label for="member-${escapeHtml(mass.id)}-${index}">Acólito</label><select id="member-${escapeHtml(mass.id)}-${index}" name="member-${index}"><option value="">Não escalado</option>${memberOptions}</select></div>
+              </div>`;
+            }).join("");
+            const detailsId = `admin-mass-details-${mass.id}`;
+            return `<article class="admin-event">
+              <button class="admin-event-toggle" type="button" data-toggle-admin-mass aria-expanded="false" aria-controls="${escapeHtml(detailsId)}">
+                <span class="admin-event-summary"><span class="admin-event-name">${escapeHtml(formatDate(mass.date, { weekday: "long", day: "numeric", month: "long" }))}</span><span class="mass-meta">Missa · ${escapeHtml(mass.time)}</span></span>
+                <span class="expand-indicator" aria-hidden="true"></span>
+              </button>
+              <div class="admin-event-details" id="${escapeHtml(detailsId)}" hidden>
+                <form class="admin-event-form" data-event-form="${escapeHtml(mass.id)}">
+                  <div class="field"><label for="date-${escapeHtml(mass.id)}">Data</label><input id="date-${escapeHtml(mass.id)}" name="date" type="date" value="${escapeHtml(mass.date)}" required></div>
+                  <div class="field"><label for="time-${escapeHtml(mass.id)}">Horário</label><input id="time-${escapeHtml(mass.id)}" name="time" type="time" value="${escapeHtml(mass.time)}" required></div>
+                  <div class="admin-event-assignments">${assignmentFields}</div>
+                  <button class="button button-small" type="submit">Salvar alteração</button>
+                </form>
+              </div>
+            </article>`;
+          }).join("")
+          : `<p class="empty-note">Nenhuma missa futura cadastrada.</p>`;
+
+        app.innerHTML = `<div class="admin-heading-row"><h1 class="page-heading">Área do administrador</h1><button class="button button-small" type="button" data-logout>Sair</button></div>
+          <p class="intro">Gerencie os acólitos e organize as próximas escalas.</p>
+          <div class="admin-grid">
+            <section class="panel" aria-labelledby="members-heading">
+              <h2 id="members-heading">Acólitos</h2>
+              <p class="panel-description">Cadastre e mantenha atualizada a lista de pessoas disponíveis para servir.</p>
+              <form class="form-row" id="member-form">
+                <div class="field"><label for="member-name">Nome do acólito</label><input id="member-name" name="name" type="text" maxlength="70" placeholder="Ex.: Maria da Silva" required></div>
+                <button class="button button-primary" type="submit">Adicionar acólito</button>
+              </form>
+              <ul class="member-list">${memberRows}</ul>
+            </section>
+
+            <section class="panel" aria-labelledby="generate-heading">
+              <h2 id="generate-heading">Gerar escala</h2>
+              <p class="panel-description">Cria uma escala para os próximos seis meses. Na primeira geração, usa a rotação do PDF se Amanda, Fabrício e Brenda forem os três acólitos cadastrados; depois, busca variar e equilibrar as equipes.</p>
+              ${state.members.length < FIRST_MASS_ROLES.length ? `<p class="notice">Cadastre pelo menos ${FIRST_MASS_ROLES.length} acólitos para preencher todas as funções da missa com mais vagas.</p>` : ""}
+              <div class="admin-actions"><p>${future.length} missa${future.length === 1 ? "" : "s"} no período · ${state.members.length} acólito${state.members.length === 1 ? "" : "s"} ${state.members.length === 1 ? "disponível" : "disponíveis"}</p><button class="button button-primary" id="generate-button" type="button">Gerar escala dos próximos 6 meses</button></div>
+            </section>
+
+            <section class="panel" aria-labelledby="dates-heading">
+              <h2 id="dates-heading">Datas e horários das missas</h2>
+              <p class="panel-description">Se necessário, altere uma data ou horário individualmente. As mudanças ficam salvas neste navegador.</p>
+              <div class="admin-events">${eventRows}</div>
+            </section>
+          </div>`;
+      }
+
+      function renderLogin() {
+        app.innerHTML = `<section class="panel login-panel" aria-labelledby="login-heading">
+          <h1 class="page-heading" id="login-heading">Acesso do administrador</h1>
+          <p class="panel-description">Entre com o usuário e a senha para gerenciar as escalas.</p>
+          <form class="login-form" id="login-form">
+            <div class="field"><label for="login-email">Usuário</label><input id="login-email" name="email" type="email" autocomplete="username" required></div>
+            <div class="field"><label for="login-password">Senha</label><input id="login-password" name="password" type="password" autocomplete="current-password" required></div>
+            <p class="login-error" id="login-error" role="alert"></p>
+            <button class="button button-primary" type="submit">Entrar</button>
+          </form>
+        </section>`;
+      }
+
+      function render() {
+        navButtons.forEach(button => {
+          if (button.dataset.page === currentPage) button.setAttribute("aria-current", "page");
+          else button.removeAttribute("aria-current");
+        });
+        if (currentPage === "admin" && isAdminAuthenticated) renderAdmin();
+        else if (currentPage === "admin") renderLogin();
+        else renderHome();
+      }
+
+      function shuffle(items) {
+        const result = [...items];
+        for (let index = result.length - 1; index > 0; index -= 1) {
+          const swapIndex = Math.floor(Math.random() * (index + 1));
+          [result[index], result[swapIndex]] = [result[swapIndex], result[index]];
+        }
+        return result;
+      }
+
+      function scheduleScore(assignments, masses, members) {
+        const teams = new Set();
+        const teamCounts = new Map();
+        const pairCounts = new Map();
+        const serviceCounts = new Map(members.map(member => [member.id, 0]));
+        const roleCounts = new Map();
+        let consecutiveRepeat = 0;
+
+        masses.forEach((mass, index) => {
+          const lineup = assignments[index];
+          const ids = lineup.map(item => item.memberId).sort();
+          const teamKey = ids.join("|");
+          teams.add(teamKey);
+          teamCounts.set(teamKey, (teamCounts.get(teamKey) || 0) + 1);
+          lineup.forEach(item => {
+            serviceCounts.set(item.memberId, (serviceCounts.get(item.memberId) || 0) + 1);
+            const key = `${item.memberId}|${item.role}`;
+            roleCounts.set(key, (roleCounts.get(key) || 0) + 1);
+          });
+          for (let left = 0; left < ids.length; left += 1) {
+            for (let right = left + 1; right < ids.length; right += 1) {
+              const pair = `${ids[left]}|${ids[right]}`;
+              pairCounts.set(pair, (pairCounts.get(pair) || 0) + 1);
+            }
+          }
+          if (index > 0) {
+            const previous = new Set(assignments[index - 1].map(item => item.memberId));
+            consecutiveRepeat += lineup.filter(item => previous.has(item.memberId)).length;
+          }
+        });
+
+        const countValues = [...serviceCounts.values()];
+        const average = countValues.reduce((total, count) => total + count, 0) / Math.max(1, countValues.length);
+        const serviceImbalance = countValues.reduce((total, count) => total + (count - average) ** 2, 0);
+        let roleImbalance = 0;
+        const roles = [...new Set(masses.flatMap(rolesForMass))];
+        roles.forEach(role => {
+          const counts = members.map(member => roleCounts.get(`${member.id}|${role}`) || 0);
+          const roleAverage = counts.reduce((total, count) => total + count, 0) / Math.max(1, counts.length);
+          roleImbalance += counts.reduce((total, count) => total + (count - roleAverage) ** 2, 0);
+        });
+        const repeatedTeams = [...teamCounts.values()].reduce((total, count) => total + Math.max(0, count - 1), 0);
+        const repeatedPairs = [...pairCounts.values()].reduce((total, count) => total + (count * (count - 1)) / 2, 0);
+        return teams.size * 100000 - repeatedTeams * 2500 - repeatedPairs * 55 - consecutiveRepeat * 90 - serviceImbalance * 20 - roleImbalance * 8;
+      }
+
+      function generateAssignments(masses, members) {
+        let bestAssignments = null;
+        let bestScore = -Infinity;
+        const attempts = 90;
+        const candidatesPerMass = Math.min(60, Math.max(24, members.length * 3));
+        for (let attempt = 0; attempt < attempts; attempt += 1) {
+          const candidateAssignments = masses.map(() => []);
+          const serviceCounts = new Map(members.map(member => [member.id, 0]));
+          const roleCounts = new Map();
+          const teamCounts = new Map();
+          const pairCounts = new Map();
+          let previousIds = new Set();
+
+          masses.forEach((mass, massIndex) => {
+            let selected = null;
+            let selectedScore = Infinity;
+            for (let candidate = 0; candidate < candidatesPerMass; candidate += 1) {
+              const roles = rolesForMass(mass);
+              const lineup = shuffle(members).slice(0, roles.length).map((member, index) => ({
+                memberId: member.id,
+                role: roles[index]
+              }));
+              const ids = lineup.map(item => item.memberId).sort();
+              const teamKey = ids.join("|");
+              let cost = (teamCounts.get(teamKey) || 0) * 1200;
+              lineup.forEach(item => {
+                cost += (serviceCounts.get(item.memberId) || 0) * 9;
+                cost += (roleCounts.get(`${item.memberId}|${item.role}`) || 0) * 7;
+                if (previousIds.has(item.memberId)) cost += 45;
+              });
+              for (let left = 0; left < ids.length; left += 1) {
+                for (let right = left + 1; right < ids.length; right += 1) {
+                  cost += (pairCounts.get(`${ids[left]}|${ids[right]}`) || 0) * 12;
+                }
+              }
+              cost += Math.random() * 4;
+              if (cost < selectedScore) {
+                selected = lineup;
+                selectedScore = cost;
+              }
+            }
+
+            candidateAssignments[massIndex] = selected;
+            const ids = selected.map(item => item.memberId).sort();
+            const teamKey = ids.join("|");
+            teamCounts.set(teamKey, (teamCounts.get(teamKey) || 0) + 1);
+            selected.forEach(item => {
+              serviceCounts.set(item.memberId, serviceCounts.get(item.memberId) + 1);
+              const roleKey = `${item.memberId}|${item.role}`;
+              roleCounts.set(roleKey, (roleCounts.get(roleKey) || 0) + 1);
+            });
+            for (let left = 0; left < ids.length; left += 1) {
+              for (let right = left + 1; right < ids.length; right += 1) {
+                const pair = `${ids[left]}|${ids[right]}`;
+                pairCounts.set(pair, (pairCounts.get(pair) || 0) + 1);
+              }
+            }
+            previousIds = new Set(ids);
+          });
+
+          const score = scheduleScore(candidateAssignments, masses, members);
+          if (score > bestScore) {
+            bestScore = score;
+            bestAssignments = candidateAssignments;
+          }
+        }
+        return bestAssignments;
+      }
+
+      navButtons.forEach(button => button.addEventListener("click", () => {
+        currentPage = button.dataset.page;
+        render();
+        app.focus();
+      }));
+
+      app.addEventListener("submit", event => {
+        event.preventDefault();
+        const form = event.target;
+        if (form.id === "login-form") {
+          const email = String(new FormData(form).get("email")).trim();
+          const password = String(new FormData(form).get("password"));
+          if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
+            isAdminAuthenticated = true;
+            sessionStorage.setItem(ADMIN_SESSION_KEY, "true");
+            render();
+          } else {
+            form.querySelector("#login-error").textContent = "Usuário ou senha incorretos.";
+            form.elements.password.value = "";
+            form.elements.password.focus();
+          }
+          return;
+        }
+        if (!isAdminAuthenticated || currentPage !== "admin") return;
+        if (form.id === "member-form") {
+          const input = form.elements.name;
+          const name = input.value.trim();
+          if (!name) return;
+          if (state.members.some(member => member.name.toLocaleLowerCase("pt-BR") === name.toLocaleLowerCase("pt-BR"))) {
+            window.alert("Esse acólito já está cadastrado.");
+            return;
+          }
+          state.members.push({ id: newId(), name });
+          saveState();
+          render();
+        } else if (form.matches("[data-event-form]")) {
+          const mass = state.masses.find(item => item.id === form.dataset.eventForm);
+          if (!mass) return;
+          const date = form.elements.date.value;
+          const time = form.elements.time.value;
+          if (!date || !time) return;
+          const roles = rolesForMass(mass);
+          const chosenMembers = roles.map((_, index) => form.elements[`member-${index}`].value);
+          const assignedCount = chosenMembers.filter(Boolean).length;
+          let assignments = [];
+          if (assignedCount > 0) {
+            if (assignedCount !== roles.length) {
+              window.alert(`Selecione um acólito para cada uma das ${roles.length} funções, ou deixe todas sem atribuição.`);
+              return;
+            }
+            const chosenRoles = roles.map((_, index) => form.elements[`role-${index}`].value);
+            if (chosenRoles.some(role => !roles.includes(role)) || new Set(chosenRoles).size !== roles.length) {
+              window.alert("Cada função da missa deve ser escolhida uma única vez.");
+              return;
+            }
+            if (new Set(chosenMembers).size !== roles.length) {
+              window.alert("Cada acólito pode ocupar apenas uma função nesta missa.");
+              return;
+            }
+            assignments = chosenMembers.map((memberId, index) => ({
+              memberId,
+              role: chosenRoles[index]
+            }));
+          }
+          mass.date = date;
+          mass.time = time;
+          mass.assignments = assignments;
+          state.masses.sort((a, b) => `${a.date}T${a.time}`.localeCompare(`${b.date}T${b.time}`));
+          saveState();
+          render();
+        }
+      });
+
+      app.addEventListener("click", event => {
+        const massToggle = event.target.closest("[data-toggle-mass]");
+        if (massToggle && currentPage === "home") {
+          const expanded = massToggle.getAttribute("aria-expanded") === "true";
+          massToggle.setAttribute("aria-expanded", String(!expanded));
+          const detail = document.getElementById(massToggle.getAttribute("aria-controls"));
+          if (detail) detail.hidden = expanded;
+          return;
+        }
+        const adminMassToggle = event.target.closest("[data-toggle-admin-mass]");
+        if (adminMassToggle && currentPage === "admin" && isAdminAuthenticated) {
+          const opening = adminMassToggle.getAttribute("aria-expanded") !== "true";
+          app.querySelectorAll("[data-toggle-admin-mass][aria-expanded='true']").forEach(toggle => {
+            if (toggle === adminMassToggle) return;
+            toggle.setAttribute("aria-expanded", "false");
+            const detail = document.getElementById(toggle.getAttribute("aria-controls"));
+            if (detail) detail.hidden = true;
+          });
+          adminMassToggle.setAttribute("aria-expanded", String(opening));
+          const details = document.getElementById(adminMassToggle.getAttribute("aria-controls"));
+          if (details) details.hidden = !opening;
+          return;
+        }
+        if (!isAdminAuthenticated || currentPage !== "admin") return;
+        if (event.target.closest("[data-logout]")) {
+          isAdminAuthenticated = false;
+          sessionStorage.removeItem(ADMIN_SESSION_KEY);
+          currentPage = "home";
+          render();
+          return;
+        }
+        const editButton = event.target.closest("[data-edit-member]");
+        if (editButton) {
+          const member = getMember(editButton.dataset.editMember);
+          if (!member) return;
+          const newName = window.prompt("Editar nome do acólito:", member.name);
+          if (newName === null) return;
+          const trimmed = newName.trim();
+          if (!trimmed) {
+            window.alert("O nome não pode ficar vazio.");
+            return;
+          }
+          if (state.members.some(item => item.id !== member.id && item.name.toLocaleLowerCase("pt-BR") === trimmed.toLocaleLowerCase("pt-BR"))) {
+            window.alert("Já existe um acólito com esse nome.");
+            return;
+          }
+          member.name = trimmed;
+          saveState();
+          render();
+          return;
+        }
+
+        const deleteButton = event.target.closest("[data-delete-member]");
+        if (deleteButton) {
+          const member = getMember(deleteButton.dataset.deleteMember);
+          if (!member || !window.confirm(`Excluir ${member.name} da lista de acólitos?`)) return;
+          state.members = state.members.filter(item => item.id !== member.id);
+          state.masses.forEach(mass => {
+            mass.assignments = (mass.assignments || []).filter(item => item.memberId !== member.id);
+          });
+          saveState();
+          render();
+          return;
+        }
+
+        if (event.target.closest("#generate-button")) {
+          const activeMembers = [...state.members];
+          if (activeMembers.length < FIRST_MASS_ROLES.length) {
+            window.alert(`Cadastre pelo menos ${FIRST_MASS_ROLES.length} acólitos para preencher todas as funções da missa com mais vagas.`);
+            return;
+          }
+          if (!window.confirm("Gerar uma nova escala para os próximos seis meses? As equipes atuais desse período serão substituídas.")) return;
+          const masses = createUpcomingMasses(state.settings);
+          const firstAssignments = state.initialOrderApplied
+            ? null
+            : generatePdfFirstAssignments(masses, activeMembers);
+          const assignments = firstAssignments || generateAssignments(masses, activeMembers);
+          state.masses = masses.map((mass, index) => ({ ...mass, assignments: assignments[index] }));
+          state.initialOrderApplied = true;
+          saveState();
+          render();
+        }
+      });
+
+      try {
+        state = loadState();
+      } catch (error) {
+        console.error("Não foi possível ler os dados salvos.", error);
+        window.alert("Os dados salvos não puderam ser lidos. Uma lista nova será iniciada.");
+        state = { members: [], settings: { ...defaultSettings }, masses: [], initialOrderApplied: false };
+        state.masses = createUpcomingMasses(state.settings);
+      }
+      render();
+    })();
+  </script>
+</body>
+</html>
