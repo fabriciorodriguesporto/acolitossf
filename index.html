@@ -88,7 +88,6 @@
     }
     .eyebrow { margin: 0 0 12px; font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; opacity: .8; }
     .next-date { margin: 0; font-size: clamp(21px, 4vw, 32px); font-weight: 620; letter-spacing: -.035em; }
-    .next-meta { display: flex; align-items: center; margin: 8px 0 18px; }
     .next-card .confirmation-status { margin-left: 0; }
     .team-title { margin: 0 0 11px; font-size: 13px; font-weight: 600; }
     .next-team { padding-top: 16px; border-top: 1px solid rgba(249,250,251,.2); }
@@ -150,10 +149,6 @@
     .mass-row:focus-visible { outline: 2px solid var(--primary); outline-offset: -3px; }
     .mass-date { margin: 0; color: var(--primary); font-size: 14px; font-weight: 600; }
     .mass-meta { display: block; margin: 3px 0 0; color: var(--muted); font-size: 12px; }
-    .confirmation-status { display: inline-flex; align-items: center; margin-left: 6px; padding: 2px 7px; border-radius: 999px; font-size: 10px; font-weight: 650; line-height: 1.4; white-space: nowrap; vertical-align: middle; }
-    .confirmation-status[data-confirmed="true"] { color: var(--primary); background: var(--primary-soft); }
-    .confirmation-status[data-confirmed="false"] { color: var(--ink); background: var(--accent-soft); }
-    .next-card .confirmation-status[data-confirmed="true"] { color: #fff; background: rgba(249,250,251,.16); }
     .expand-indicator { flex: 0 0 9px; width: 9px; height: 9px; margin-right: 3px; border-right: 1.5px solid var(--accent); border-bottom: 1.5px solid var(--accent); transform: rotate(45deg) translateY(-2px); transition: transform .15s ease; }
     .mass-row[aria-expanded="true"] .expand-indicator { transform: rotate(225deg) translate(-2px, -1px); }
     .mass-detail { display: grid; gap: 7px; padding: 11px 17px 14px; border-top: 1px solid var(--line); }
@@ -165,7 +160,7 @@
     .mass-note { display: flex; align-items: flex-start; gap: 9px; margin: 6px 0 0; padding: 10px 12px; color: var(--ink); background: var(--accent-soft); border-left: 3px solid var(--accent); border-radius: 7px; font-size: 13px; white-space: pre-wrap; overflow-wrap: anywhere; }
     .mass-note .note-alert { margin-left: 0; }
     .mass-note p { margin: 0; }
-    .next-card .mass-note { margin: 0 0 18px; color: #fff; background: rgba(249,250,251,.12); }
+    .next-card .mass-note { align-items: center; margin: 18px 0; color: #fff; background: rgba(249,250,251,.12); }
     .next-card .note-alert { flex: 0 0 18px; color: var(--ink); background: var(--accent); }
     .empty-note { margin: 0; padding: 19px; color: var(--muted); background: var(--paper); border: 1px solid var(--line); border-radius: 9px; font-size: 14px; }
 
@@ -186,6 +181,24 @@
     .panel h2 { margin: 0; color: var(--primary); font-size: 16px; font-weight: 620; }
     .panel-description { margin: 5px 0 17px; color: var(--muted); font-size: 13px; }
     .form-row { display: flex; align-items: end; gap: 9px; }
+    .member-add-toggle { display: flex; width: 100%; align-items: center; justify-content: space-between; padding: 0; color: var(--primary); background: transparent; border: 0; text-align: left; font-size: 16px; font-weight: 620; }
+    .member-add-toggle[aria-expanded="true"] .expand-indicator { transform: rotate(225deg) translate(-2px, -1px); }
+    .member-add-toggle:active { color: var(--primary) !important; background-color: transparent !important; border-color: transparent !important; box-shadow: none !important; }
+    .member-form { display: grid; gap: 13px; margin-top: 15px; }
+    .member-form[hidden] { display: none; }
+    .member-form-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; }
+    .photo-file-control { display: flex; min-height: 41px; align-items: center; gap: 9px; padding: 5px 8px; background: var(--paper); border: 1px solid var(--line); border-radius: 7px; }
+    .photo-file-control:focus-within { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-soft); }
+    .photo-file-button { flex: 0 0 auto; }
+    .photo-file-name { min-width: 0; overflow: hidden; color: var(--muted); font-size: 13px; text-overflow: ellipsis; white-space: nowrap; }
+    .photo-adjustment { display: grid; width: fit-content; gap: 8px; }
+    .photo-adjustment[hidden] { display: none; }
+    .photo-adjustment label { color: var(--ink); font-size: 12px; font-weight: 600; }
+    .photo-crop-preview { width: 180px; height: 180px; touch-action: none; background: var(--primary-soft); border: 1px solid var(--line); border-radius: 8px; cursor: grab; }
+    .photo-crop-preview:active { cursor: grabbing; }
+    .photo-adjustment input { width: 180px; accent-color: var(--primary); }
+    .photo-adjustment p { max-width: 260px; margin: 0; color: var(--muted); font-size: 12px; }
+    .member-form-actions { display: flex; gap: 8px; }
     .field { display: grid; flex: 1; gap: 6px; min-width: 0; }
     .field label { color: var(--ink); font-size: 12px; font-weight: 600; }
     .field input {
@@ -224,7 +237,6 @@
     .member-actions { display: flex; gap: 6px; }
     .member-count { color: var(--muted); font-size: 12px; }
     .admin-actions { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-top: 15px; }
-    .admin-actions p { margin: 0; color: var(--muted); font-size: 12px; }
     .admin-events { display: grid; gap: 9px; margin-top: 17px; }
     .admin-event { overflow: hidden; border: 1px solid var(--line); border-radius: 8px; }
     .admin-event-toggle { display: flex; width: 100%; align-items: center; justify-content: space-between; gap: 12px; padding: 13px 14px; color: var(--ink); background: var(--paper); border: 0; text-align: left; font: inherit; }
@@ -235,14 +247,16 @@
     .admin-event-name { margin: 0; color: var(--primary); font-size: 13px; font-weight: 600; }
     .admin-event-form { display: grid; grid-template-columns: repeat(2, minmax(140px, 1fr)); gap: 10px; margin-top: 10px; }
     .admin-event-form input { min-height: 36px; font-size: 13px; }
-    .confirmation-field { display: flex; grid-column: 1 / -1; align-items: center; gap: 8px; }
-    .confirmation-field input { width: 16px; min-height: 16px; margin: 0; accent-color: var(--primary); }
-    .confirmation-field label { color: var(--ink); font-size: 13px; font-weight: 600; }
     .field textarea { width: 100%; min-height: 82px; padding: 9px 11px; color: var(--ink); background: var(--paper); border: 1px solid var(--line); border-radius: 7px; font: inherit; font-size: 13px; resize: vertical; }
     .field textarea:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 0 3px var(--primary-soft); }
-    .admin-event-note { grid-column: 1 / -1; }
+    .admin-event-note { grid-column: 1 / -1; width: min(100%, 560px); justify-self: center; }
+    .admin-event-note label { text-align: center; }
+    .admin-event-form > button[type="submit"] { grid-column: 1 / -1; justify-self: center; }
     .admin-event-assignments { display: grid; grid-column: 1 / -1; gap: 10px; margin-top: 13px; }
     .admin-assignment-row { display: grid; grid-template-columns: minmax(150px, .7fr) minmax(180px, 1fr); gap: 10px; }
+    .admin-manual-assignments { display: grid; grid-column: 1 / -1; gap: 9px; }
+    .admin-manual-assignment-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)) auto; align-items: end; gap: 9px; }
+    .admin-manual-assignment-row .button { min-height: 36px; }
     .admin-assignment-row select { width: 100%; min-height: 36px; padding: 7px 9px; color: var(--ink); background: var(--paper); border: 1px solid var(--line); border-radius: 7px; font: inherit; font-size: 13px; }
     .notice { margin: 0 0 16px; padding: 11px 13px; color: var(--ink); background: var(--accent-soft); border-left: 3px solid var(--accent); border-radius: 7px; font-size: 13px; }
     .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
@@ -258,13 +272,17 @@
       .mass-detail { padding: 10px 13px 12px; }
       .form-row { align-items: stretch; flex-direction: column; }
       .form-row .button { width: 100%; }
+      .member-form-fields { grid-template-columns: 1fr; }
+      .member-form-actions { flex-direction: column; }
+      .member-form-actions .button { width: 100%; }
       .panel { padding: 18px 16px; }
       .admin-heading-row { align-items: flex-start; }
       .admin-assignment-row { grid-template-columns: 1fr; gap: 8px; }
+      .admin-manual-assignment-row { grid-template-columns: 1fr; }
       .admin-actions { align-items: stretch; flex-direction: column; }
       .admin-actions .button { width: 100%; }
       .admin-event-form { grid-template-columns: 1fr; }
-      .admin-event-form .button { width: 100%; }
+      .admin-event-form > button[type="submit"] { width: auto; }
     }
   </style>
 </head>
@@ -291,6 +309,7 @@
       const STORAGE_KEY = "acolitos-sao-francisco-v1";
       const FIRST_MASS_ROLES = ["Microfone", "Naveta", "Turíbulo"];
       const SECOND_MASS_ROLES = ["Microfone", "Missal"];
+      const LEGACY_EXTRA_ROLE = "Acólito extra";
       const PDF_FIRST_GENERATION_ROTATION = [
         { first: [0, 1, 2], second: [1, 2, 0] },
         { first: [2, 0, 1], second: [0, 1, 2] },
@@ -308,6 +327,8 @@
       const navButtons = [...document.querySelectorAll("[data-page]")];
       let currentPage = "home";
       let isAdminAuthenticated = sessionStorage.getItem(ADMIN_SESSION_KEY) === "true";
+      let photoCrop = null;
+      let photoDrag = null;
       let state;
 
       const newId = () => window.crypto && crypto.randomUUID
@@ -330,20 +351,20 @@
       function createUpcomingMasses(settings) {
         const now = new Date();
         const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        const oneYearFromToday = new Date(today.getFullYear() + 1, today.getMonth(), today.getDate());
         const events = [];
-        for (let offset = 0; offset < 6; offset += 1) {
+        for (let offset = 0; offset <= 12; offset += 1) {
           const month = new Date(today.getFullYear(), today.getMonth() + offset, 1);
           for (const [ordinal, time] of [[2, settings.secondSaturdayTime], [4, settings.fourthSaturdayTime]]) {
             const firstDay = new Date(month.getFullYear(), month.getMonth(), 1);
             const firstSaturday = 1 + ((6 - firstDay.getDay() + 7) % 7);
             const date = new Date(month.getFullYear(), month.getMonth(), firstSaturday + (ordinal - 1) * 7);
-            if (date < today) continue;
+            if (date < today || date > oneYearFromToday) continue;
             events.push({
               id: newId(),
               date: localDateString(date),
               time,
               massType: ordinal === 2 ? "first" : "second",
-              confirmed: false,
               assignments: []
             });
           }
@@ -356,22 +377,40 @@
         if (stored) {
           const parsed = JSON.parse(stored);
           const settings = { ...defaultSettings, ...(parsed.settings || {}) };
+          const members = Array.isArray(parsed.members) ? parsed.members : [];
           const masses = Array.isArray(parsed.masses) ? parsed.masses.map(mass => {
             const massType = mass.massType || inferMassType(mass.date, mass.time, settings);
             const roles = rolesForMass({ ...mass, massType });
-            const assignments = Array.isArray(mass.assignments) ? mass.assignments : [];
-            const validAssignments = assignments.length === roles.length
-              && assignments.every(item => roles.includes(item.role));
+            const assignments = (Array.isArray(mass.assignments) ? mass.assignments : []).map(item => {
+              const member = item && item.role === LEGACY_EXTRA_ROLE
+                ? members.find(candidate => candidate.id === item.memberId)
+                : null;
+              return member && typeof member.name === "string"
+                ? { manualName: member.name, role: item.role }
+                : item;
+            });
+            const regularAssignments = assignments.filter(item => item && typeof item.memberId === "string" && roles.includes(item.role));
+            const manualAssignments = assignments.filter(item =>
+              item && !item.memberId && typeof item.manualName === "string" && item.manualName.trim()
+                && typeof item.role === "string" && item.role.trim()
+            );
+            const validAssignments = assignments.length === 0 || (
+              assignments.length === roles.length + manualAssignments.length
+              && regularAssignments.length === roles.length
+              && roles.every(role => regularAssignments.some(item => item.role === role))
+              && new Set(regularAssignments.map(item => item.memberId)).size === regularAssignments.length
+            );
+            const massData = { ...mass };
+            delete massData.confirmed;
             return {
-              ...mass,
+              ...massData,
               massType,
               note: typeof mass.note === "string" ? mass.note : "",
-              confirmed: mass.confirmed === true,
               assignments: validAssignments ? assignments : []
             };
           }) : [];
           return {
-            members: Array.isArray(parsed.members) ? parsed.members : [],
+            members,
             settings,
             masses,
             initialOrderApplied: parsed.initialOrderApplied === true
@@ -393,6 +432,16 @@
 
       function rolesForMass(mass) {
         return mass.massType === "first" ? FIRST_MASS_ROLES : SECOND_MASS_ROLES;
+      }
+
+      function manualAssignmentRowMarkup(massId, index, assignment = {}) {
+        const nameId = `manual-name-${massId}-${index}`;
+        const roleId = `manual-role-${massId}-${index}`;
+        return `<div class="admin-manual-assignment-row" data-manual-assignment-row>
+          <div class="field"><label for="${escapeHtml(nameId)}">Nome do acólito</label><input id="${escapeHtml(nameId)}" name="manualName" type="text" maxlength="70" value="${escapeHtml(assignment.manualName || "")}" placeholder="Digite o nome"></div>
+          <div class="field"><label for="${escapeHtml(roleId)}">Função</label><input id="${escapeHtml(roleId)}" name="manualRole" type="text" maxlength="70" value="${escapeHtml(assignment.role || "")}" placeholder="Digite a função"></div>
+          <button class="button button-small button-danger" type="button" data-remove-manual-assignment>Remover</button>
+        </div>`;
       }
 
       function generatePdfFirstAssignments(masses, members) {
@@ -460,6 +509,14 @@
           : `<span class="${avatarClass}" aria-hidden="true">${escapeHtml(initials)}</span>`;
       }
 
+      function assignmentPersonMarkup(assignment, identityClass, small = false) {
+        const member = assignment.memberId ? getMember(assignment.memberId) : null;
+        const name = member ? member.name : assignment.manualName;
+        return name
+          ? `<span class="${identityClass}">${profilePhotoMarkup(member || { name }, small)}<span>${escapeHtml(name)}</span></span>`
+          : "";
+      }
+
       function noteAlertMarkup(note) {
         return note
           ? `<span class="note-alert" role="img" aria-label="Esta missa tem uma observação" title="Esta missa tem uma observação">!</span>`
@@ -472,31 +529,48 @@
           : "";
       }
 
-      function confirmationStatusMarkup(mass) {
-        const confirmed = mass.confirmed === true;
-        return `<span class="confirmation-status" data-confirmed="${confirmed}">${confirmed ? "Confirmada" : "Estimada"}</span>`;
-      }
-
-      async function resizeProfilePhoto(file) {
+      async function loadProfilePhoto(file) {
         if (!file) return "";
         if (!file.type.startsWith("image/")) throw new Error("Selecione um arquivo de imagem.");
         if (file.size > 5 * 1024 * 1024) throw new Error("A foto deve ter no máximo 5 MB.");
         if (typeof createImageBitmap !== "function") throw new Error("Este navegador não oferece suporte ao envio de fotos.");
+        return createImageBitmap(file);
+      }
 
-        const image = await createImageBitmap(file);
-        try {
-          const maxDimension = 256;
-          const scale = Math.min(1, maxDimension / Math.max(image.width, image.height));
-          const canvas = document.createElement("canvas");
-          canvas.width = Math.max(1, Math.round(image.width * scale));
-          canvas.height = Math.max(1, Math.round(image.height * scale));
-          canvas.getContext("2d").drawImage(image, 0, 0, canvas.width, canvas.height);
-          const photo = canvas.toDataURL("image/jpeg", 0.75);
-          if (photo.length > 150000) throw new Error("Não foi possível reduzir a foto o suficiente. Escolha uma imagem mais simples.");
-          return photo;
-        } finally {
-          image.close();
-        }
+      function drawPhotoCrop() {
+        const canvas = document.querySelector("#photo-crop-preview");
+        if (!canvas || !photoCrop) return;
+        const context = canvas.getContext("2d");
+        if (!context) throw new Error("Não foi possível ajustar a foto neste navegador.");
+        const baseScale = Math.max(canvas.width / photoCrop.image.width, canvas.height / photoCrop.image.height);
+        const width = photoCrop.image.width * baseScale * photoCrop.zoom;
+        const height = photoCrop.image.height * baseScale * photoCrop.zoom;
+        const maxX = Math.max(0, (width - canvas.width) / 2);
+        const maxY = Math.max(0, (height - canvas.height) / 2);
+        photoCrop.offsetX = Math.max(-maxX, Math.min(maxX, photoCrop.offsetX));
+        photoCrop.offsetY = Math.max(-maxY, Math.min(maxY, photoCrop.offsetY));
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        context.drawImage(photoCrop.image, (canvas.width - width) / 2 + photoCrop.offsetX,
+          (canvas.height - height) / 2 + photoCrop.offsetY, width, height);
+      }
+
+      function croppedProfilePhoto() {
+        if (!photoCrop) return "";
+        const size = 256;
+        const canvas = document.createElement("canvas");
+        canvas.width = size;
+        canvas.height = size;
+        const context = canvas.getContext("2d");
+        if (!context) throw new Error("Não foi possível ajustar a foto neste navegador.");
+        const baseScale = Math.max(size / photoCrop.image.width, size / photoCrop.image.height);
+        const width = photoCrop.image.width * baseScale * photoCrop.zoom;
+        const height = photoCrop.image.height * baseScale * photoCrop.zoom;
+        const ratio = size / 240;
+        context.drawImage(photoCrop.image, (size - width) / 2 + photoCrop.offsetX * ratio,
+          (size - height) / 2 + photoCrop.offsetY * ratio, width, height);
+        const photo = canvas.toDataURL("image/jpeg", 0.78);
+        if (photo.length > 150000) throw new Error("Não foi possível reduzir a foto o suficiente. Escolha outra imagem.");
+        return photo;
       }
 
       function renderHome() {
@@ -507,14 +581,13 @@
           ? `<section class="next-card" aria-labelledby="next-heading">
               <p class="eyebrow">Próxima missa</p>
               <h1 class="next-date" id="next-heading">${escapeHtml(formatDate(next.date, { weekday: "long", day: "numeric", month: "long" }))} às ${escapeHtml(next.time)}</h1>
-              <div class="next-meta">${confirmationStatusMarkup(next)}</div>
               ${massNoteMarkup(next.note)}
               <div class="next-team">
-                <p class="team-title">Servidores e funções</p>
+                <p class="team-title">Escala</p>
                 ${assignments.length
                   ? `<div class="team-list">${assignments.map(item => {
-                      const member = getMember(item.memberId);
-                      return member ? `<div class="team-person"><span class="team-person-identity">${profilePhotoMarkup(member)}<span>${escapeHtml(member.name)}</span></span><span class="team-role">${escapeHtml(item.role)}</span></div>` : "";
+                      const identity = assignmentPersonMarkup(item, "team-person-identity");
+                      return identity ? `<div class="team-person">${identity}<span class="team-role">${escapeHtml(item.role)}</span></div>` : "";
                     }).join("")}</div>`
                   : `<p class="unassigned">Equipe ainda não definida.</p>`}
               </div>
@@ -522,16 +595,16 @@
           : `<section class="next-card"><p class="eyebrow">Próxima missa</p><h1 class="next-date">Nenhuma missa cadastrada</h1></section>`;
         const rows = events.map(mass => {
           const details = (mass.assignments || []).map(item => {
-            const member = getMember(item.memberId);
-            return member
-              ? `<div class="mass-detail-item"><span class="mass-detail-identity">${profilePhotoMarkup(member, true)}<span>${escapeHtml(member.name)}</span></span><span class="mass-detail-role">${escapeHtml(item.role)}</span></div>`
+            const identity = assignmentPersonMarkup(item, "mass-detail-identity", true);
+            return identity
+              ? `<div class="mass-detail-item">${identity}<span class="mass-detail-role">${escapeHtml(item.role)}</span></div>`
               : "";
           }).join("");
           const note = massNoteMarkup(mass.note);
           const detailId = `mass-detail-${mass.id}`;
           return `<div class="mass-entry">
             <button class="mass-row" type="button" data-toggle-mass aria-expanded="false" aria-controls="${escapeHtml(detailId)}">
-              <span><span class="mass-date">${escapeHtml(formatDate(mass.date, { weekday: "long", day: "numeric", month: "long" }))}${noteAlertMarkup(mass.note)}</span><span class="mass-meta">Missa · ${escapeHtml(mass.time)} ${confirmationStatusMarkup(mass)}</span></span>
+              <span><span class="mass-date">${escapeHtml(formatDate(mass.date, { weekday: "long", day: "numeric", month: "long" }))}${noteAlertMarkup(mass.note)}</span><span class="mass-meta">Missa · ${escapeHtml(mass.time)}</span></span>
               <span class="expand-indicator" aria-hidden="true"></span>
             </button>
             <div class="mass-detail" id="${escapeHtml(detailId)}" hidden>${note}${details || `<p class="mass-detail-empty">Equipe a definir</p>`}</div>
@@ -541,8 +614,8 @@
         app.innerHTML = `<h2 class="sr-only">Início</h2>
           ${nextBlock}
           <section class="schedule-section" aria-labelledby="schedule-heading">
-            <div class="section-heading"><h2 id="schedule-heading">Próximas missas</h2><span>Próximos 6 meses</span></div>
-            <p class="schedule-note">Previsão: 2º e 4º sábados do mês. Datas e horários oficiais são confirmados no início de cada mês.</p>
+            <div class="section-heading"><h2 id="schedule-heading">Missas programadas</h2></div>
+            <p class="schedule-note">Previsão: 2º e 4º sábados do mês.</p>
             <div class="mass-list">${rows || `<p class="empty-note">Não há missas futuras. Confira as configurações na área do administrador.</p>`}</div>
           </section>`;
       }
@@ -564,6 +637,10 @@
           ? future.map(mass => {
             const roles = rolesForMass(mass);
             const assignments = mass.assignments || [];
+            const manualAssignments = assignments.filter(item => item.manualName);
+            const manualAssignmentRows = manualAssignments
+              .map((item, index) => manualAssignmentRowMarkup(mass.id, index, item))
+              .join("");
             const assignmentFields = roles.map((defaultRole, index) => {
               const assignment = assignments[index];
               const roleOptions = roles.map(role => `<option value="${escapeHtml(role)}"${role === (assignment ? assignment.role : defaultRole) ? " selected" : ""}>${escapeHtml(role)}</option>`).join("");
@@ -576,16 +653,19 @@
             const detailsId = `admin-mass-details-${mass.id}`;
             return `<article class="admin-event">
               <button class="admin-event-toggle" type="button" data-toggle-admin-mass aria-expanded="false" aria-controls="${escapeHtml(detailsId)}">
-                <span class="admin-event-summary"><span class="admin-event-name">${escapeHtml(formatDate(mass.date, { weekday: "long", day: "numeric", month: "long" }))}${noteAlertMarkup(mass.note)}</span><span class="mass-meta">Missa · ${escapeHtml(mass.time)} ${confirmationStatusMarkup(mass)}</span></span>
+                <span class="admin-event-summary"><span class="admin-event-name">${escapeHtml(formatDate(mass.date, { weekday: "long", day: "numeric", month: "long" }))}${noteAlertMarkup(mass.note)}</span><span class="mass-meta">Missa · ${escapeHtml(mass.time)}</span></span>
                 <span class="expand-indicator" aria-hidden="true"></span>
               </button>
               <div class="admin-event-details" id="${escapeHtml(detailsId)}" hidden>
                 <form class="admin-event-form" data-event-form="${escapeHtml(mass.id)}">
                   <div class="field"><label for="date-${escapeHtml(mass.id)}">Data</label><input id="date-${escapeHtml(mass.id)}" name="date" type="date" value="${escapeHtml(mass.date)}" required></div>
                   <div class="field"><label for="time-${escapeHtml(mass.id)}">Horário</label><input id="time-${escapeHtml(mass.id)}" name="time" type="time" value="${escapeHtml(mass.time)}" required></div>
-                  <div class="confirmation-field"><input id="confirmed-${escapeHtml(mass.id)}" name="confirmed" type="checkbox"${mass.confirmed === true ? " checked" : ""}><label for="confirmed-${escapeHtml(mass.id)}">Data e horário confirmados</label></div>
                   <div class="field admin-event-note"><label for="note-${escapeHtml(mass.id)}">Observação (opcional)</label><textarea id="note-${escapeHtml(mass.id)}" name="note" maxlength="500" rows="3" placeholder="Ex.: chegar 15 minutos antes">${escapeHtml(mass.note || "")}</textarea></div>
                   <div class="admin-event-assignments">${assignmentFields}</div>
+                  <div class="admin-manual-assignments" data-manual-assignment-list data-next-index="${manualAssignments.length}">
+                    ${manualAssignmentRows}
+                    <button class="button button-small" type="button" data-add-manual-assignment>Adicionar acólito manualmente</button>
+                  </div>
                   <button class="button button-small" type="submit">Salvar alteração</button>
                 </form>
               </div>
@@ -593,30 +673,49 @@
           }).join("")
           : `<p class="empty-note">Nenhuma missa futura cadastrada.</p>`;
 
-        app.innerHTML = `<div class="admin-heading-row"><h1 class="page-heading">Área do administrador</h1><button class="button button-small" type="button" data-logout>Sair</button></div>
-          <p class="intro">Gerencie os acólitos e organize as próximas escalas.</p>
+        app.innerHTML = `<h1 class="page-heading">Área do administrador</h1>
           <div class="admin-grid">
             <section class="panel" aria-labelledby="members-heading">
-              <h2 id="members-heading">Acólitos</h2>
-              <p class="panel-description">Cadastre e mantenha atualizada a lista de pessoas disponíveis para servir.</p>
-              <form class="form-row" id="member-form">
-                <div class="field"><label for="member-name">Nome do acólito</label><input id="member-name" name="name" type="text" maxlength="70" placeholder="Ex.: Maria da Silva" required></div>
-                <div class="field"><label for="member-photo">Foto de perfil (opcional)</label><input id="member-photo" name="photo" type="file" accept="image/*"></div>
-                <button class="button button-primary" type="submit">Adicionar acólito</button>
-              </form>
+              <h2 id="members-heading">Acólitos inscritos</h2>
               <ul class="member-list">${memberRows}</ul>
+            </section>
+
+            <section class="panel" aria-labelledby="toggle-member-form">
+              <button class="member-add-toggle" id="toggle-member-form" type="button" aria-expanded="false" aria-controls="member-form">
+                <span>Adicionar novo acólito</span><span class="expand-indicator" aria-hidden="true"></span>
+              </button>
+              <form class="member-form" id="member-form" hidden>
+                <div class="member-form-fields">
+                  <div class="field"><label for="member-name">Nome do acólito</label><input id="member-name" name="name" type="text" maxlength="70" placeholder="Ex.: Maria da Silva" required></div>
+                  <div class="field">
+                    <label for="member-photo">Foto do acólito (opcional)</label>
+                    <div class="photo-file-control">
+                      <button class="button button-small photo-file-button" type="button" data-select-photo aria-controls="member-photo">Selecionar foto</button>
+                      <span class="photo-file-name" id="photo-file-name" aria-live="polite">Nenhuma foto selecionada</span>
+                    </div>
+                    <input class="sr-only" id="member-photo" name="photo" type="file" accept="image/*" tabindex="-1" aria-describedby="photo-file-name">
+                  </div>
+                </div>
+                <div class="photo-adjustment" id="photo-adjustment" hidden>
+                  <label for="photo-zoom">Ajustar enquadramento</label>
+                  <canvas class="photo-crop-preview" id="photo-crop-preview" width="240" height="240" aria-label="Arraste a foto para ajustar o enquadramento"></canvas>
+                  <input id="photo-zoom" type="range" min="1" max="3" step="0.01" value="1" aria-label="Zoom da foto">
+                  <p>Arraste a foto para posicionar e use o controle para redimensionar.</p>
+                </div>
+                <div class="member-form-actions">
+                  <button class="button button-primary" type="submit">Salvar acólito</button>
+                </div>
+              </form>
             </section>
 
             <section class="panel" aria-labelledby="generate-heading">
               <h2 id="generate-heading">Gerar escala</h2>
-              <p class="panel-description">Cria uma escala para os próximos seis meses. Na primeira geração, usa a rotação do PDF se Amanda, Fabrício e Brenda forem os três acólitos cadastrados; depois, busca variar e equilibrar as equipes.</p>
               ${state.members.length < FIRST_MASS_ROLES.length ? `<p class="notice">Cadastre pelo menos ${FIRST_MASS_ROLES.length} acólitos para preencher todas as funções da missa com mais vagas.</p>` : ""}
-              <div class="admin-actions"><p>${future.length} missa${future.length === 1 ? "" : "s"} no período · ${state.members.length} acólito${state.members.length === 1 ? "" : "s"} ${state.members.length === 1 ? "disponível" : "disponíveis"}</p><button class="button button-primary" id="generate-button" type="button">Gerar escala dos próximos 6 meses</button></div>
+              <div class="admin-actions"><button class="button button-primary" id="generate-button" type="button">Gerar escala</button></div>
             </section>
 
             <section class="panel" aria-labelledby="dates-heading">
-              <h2 id="dates-heading">Datas e horários das missas</h2>
-              <p class="panel-description">Ajuste a data e o horário e marque quando estiverem confirmados. Sem marcação, a missa aparece como estimada.</p>
+              <h2 id="dates-heading">Missas programadas</h2>
               <div class="admin-events">${eventRows}</div>
             </section>
           </div>`;
@@ -625,7 +724,6 @@
       function renderLogin() {
         app.innerHTML = `<section class="panel login-panel" aria-labelledby="login-heading">
           <h1 class="page-heading" id="login-heading">Acesso do administrador</h1>
-          <p class="panel-description">Entre com o usuário e a senha para gerenciar as escalas.</p>
           <form class="login-form" id="login-form">
             <div class="field"><label for="login-email">Usuário</label><input id="login-email" name="email" type="email" autocomplete="username" required></div>
             <div class="field"><label for="login-password">Senha</label><input id="login-password" name="password" type="password" autocomplete="current-password" required></div>
@@ -769,11 +867,87 @@
         return bestAssignments;
       }
 
+      function closeMemberForm() {
+        const form = document.querySelector("#member-form");
+        const toggle = document.querySelector("#toggle-member-form");
+        if (form) {
+          form.reset();
+          form.hidden = true;
+        }
+        const adjustment = document.querySelector("#photo-adjustment");
+        if (adjustment) adjustment.hidden = true;
+        const fileName = document.querySelector("#photo-file-name");
+        if (fileName) fileName.textContent = "Nenhuma foto selecionada";
+        if (toggle) toggle.setAttribute("aria-expanded", "false");
+        if (photoCrop) photoCrop.image.close();
+        photoCrop = null;
+        photoDrag = null;
+      }
+
+      async function selectProfilePhoto(file) {
+        if (photoCrop) photoCrop.image.close();
+        photoCrop = null;
+        const adjustment = document.querySelector("#photo-adjustment");
+        if (!file) {
+          adjustment.hidden = true;
+          return;
+        }
+        try {
+          const image = await loadProfilePhoto(file);
+          photoCrop = { image, zoom: 1, offsetX: 0, offsetY: 0 };
+          document.querySelector("#photo-zoom").value = "1";
+          adjustment.hidden = false;
+          drawPhotoCrop();
+        } catch (error) {
+          document.querySelector("#member-photo").value = "";
+          adjustment.hidden = true;
+          document.querySelector("#photo-file-name").textContent = "Nenhuma foto selecionada";
+          window.alert(error.message || "Não foi possível carregar a foto selecionada.");
+        }
+      }
+
       navButtons.forEach(button => button.addEventListener("click", () => {
         currentPage = button.dataset.page;
         render();
         app.focus();
       }));
+
+      app.addEventListener("change", event => {
+        if (event.target.matches("#member-photo") && currentPage === "admin" && isAdminAuthenticated) {
+          const file = event.target.files[0];
+          document.querySelector("#photo-file-name").textContent = file ? file.name : "Nenhuma foto selecionada";
+          selectProfilePhoto(file);
+        }
+      });
+
+      app.addEventListener("input", event => {
+        if (event.target.matches("#photo-zoom") && photoCrop) {
+          photoCrop.zoom = Number(event.target.value);
+          drawPhotoCrop();
+        }
+      });
+
+      app.addEventListener("pointerdown", event => {
+        if (!event.target.matches("#photo-crop-preview") || !photoCrop) return;
+        photoDrag = { pointerId: event.pointerId, x: event.clientX, y: event.clientY };
+        event.target.setPointerCapture(event.pointerId);
+      });
+
+      app.addEventListener("pointermove", event => {
+        if (!photoDrag || event.pointerId !== photoDrag.pointerId || !photoCrop) return;
+        const canvas = event.target.closest("#photo-crop-preview");
+        if (!canvas) return;
+        const bounds = canvas.getBoundingClientRect();
+        photoCrop.offsetX += (event.clientX - photoDrag.x) * (canvas.width / bounds.width);
+        photoCrop.offsetY += (event.clientY - photoDrag.y) * (canvas.height / bounds.height);
+        photoDrag.x = event.clientX;
+        photoDrag.y = event.clientY;
+        drawPhotoCrop();
+      });
+
+      app.addEventListener("pointerup", event => {
+        if (photoDrag && event.pointerId === photoDrag.pointerId) photoDrag = null;
+      });
 
       app.addEventListener("submit", async event => {
         event.preventDefault();
@@ -803,9 +977,9 @@
           }
           let photo;
           try {
-            photo = await resizeProfilePhoto(form.elements.photo.files[0]);
+            photo = croppedProfilePhoto();
           } catch (error) {
-            window.alert(error.message || "Não foi possível carregar a foto selecionada.");
+            window.alert(error.message || "Não foi possível ajustar a foto selecionada.");
             return;
           }
           state.members.push({ id: newId(), name, ...(photo ? { photo } : {}) });
@@ -813,6 +987,7 @@
             state.members.pop();
             return;
           }
+          closeMemberForm();
           render();
         } else if (form.matches("[data-event-form]")) {
           const mass = state.masses.find(item => item.id === form.dataset.eventForm);
@@ -823,6 +998,16 @@
           const roles = rolesForMass(mass);
           const chosenMembers = roles.map((_, index) => form.elements[`member-${index}`].value);
           const assignedCount = chosenMembers.filter(Boolean).length;
+          const manualRows = [...form.querySelectorAll("[data-manual-assignment-row]")];
+          const manualAssignments = manualRows.map(row => ({
+            manualName: row.querySelector("[name='manualName']").value.trim(),
+            role: row.querySelector("[name='manualRole']").value.trim()
+          }));
+          if (manualAssignments.some(item => Boolean(item.manualName) !== Boolean(item.role))) {
+            window.alert("Preencha o nome e a função de cada acólito adicionado manualmente.");
+            return;
+          }
+          const completedManualAssignments = manualAssignments.filter(item => item.manualName && item.role);
           let assignments = [];
           if (assignedCount > 0) {
             if (assignedCount !== roles.length) {
@@ -843,9 +1028,25 @@
               role: chosenRoles[index]
             }));
           }
+          if (completedManualAssignments.length && assignedCount !== roles.length) {
+            window.alert("Preencha a escala principal antes de adicionar acólitos extras.");
+            return;
+          }
+          const normalizeName = name => name.normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim().toLocaleLowerCase("pt-BR");
+          const assignedNames = new Set(chosenMembers.filter(Boolean)
+            .map(memberId => getMember(memberId).name)
+            .map(normalizeName));
+          for (const assignment of completedManualAssignments) {
+            const nameKey = normalizeName(assignment.manualName);
+            if (assignedNames.has(nameKey)) {
+              window.alert("Cada acólito pode ocupar apenas uma função nesta missa.");
+              return;
+            }
+            assignedNames.add(nameKey);
+            assignments.push(assignment);
+          }
           mass.date = date;
           mass.time = time;
-          mass.confirmed = form.elements.confirmed.checked;
           mass.note = String(form.elements.note.value).trim().slice(0, 500);
           mass.assignments = assignments;
           state.masses.sort((a, b) => `${a.date}T${a.time}`.localeCompare(`${b.date}T${b.time}`));
@@ -855,6 +1056,20 @@
       });
 
       app.addEventListener("click", event => {
+        if (event.target.closest("[data-select-photo]")) {
+          document.querySelector("#member-photo").click();
+          return;
+        }
+        const memberFormToggle = event.target.closest("#toggle-member-form");
+        if (memberFormToggle && currentPage === "admin" && isAdminAuthenticated) {
+          const form = document.querySelector("#member-form");
+          const opening = form.hidden;
+          form.hidden = !opening;
+          memberFormToggle.setAttribute("aria-expanded", String(opening));
+          if (opening) form.elements.name.focus();
+          else closeMemberForm();
+          return;
+        }
         const massToggle = event.target.closest("[data-toggle-mass]");
         if (massToggle && currentPage === "home") {
           const expanded = massToggle.getAttribute("aria-expanded") === "true";
@@ -878,11 +1093,19 @@
           return;
         }
         if (!isAdminAuthenticated || currentPage !== "admin") return;
-        if (event.target.closest("[data-logout]")) {
-          isAdminAuthenticated = false;
-          sessionStorage.removeItem(ADMIN_SESSION_KEY);
-          currentPage = "home";
-          render();
+        const addManualAssignment = event.target.closest("[data-add-manual-assignment]");
+        if (addManualAssignment) {
+          const form = addManualAssignment.closest("[data-event-form]");
+          const list = form.querySelector("[data-manual-assignment-list]");
+          const index = Number(list.dataset.nextIndex) || 0;
+          list.dataset.nextIndex = String(index + 1);
+          list.insertAdjacentHTML("beforeend", manualAssignmentRowMarkup(form.dataset.eventForm, index));
+          list.lastElementChild.querySelector("[name='manualName']").focus();
+          return;
+        }
+        const removeManualAssignment = event.target.closest("[data-remove-manual-assignment]");
+        if (removeManualAssignment) {
+          removeManualAssignment.closest("[data-manual-assignment-row]").remove();
           return;
         }
         const editButton = event.target.closest("[data-edit-member]");
@@ -925,10 +1148,9 @@
             window.alert(`Cadastre pelo menos ${FIRST_MASS_ROLES.length} acólitos para preencher todas as funções da missa com mais vagas.`);
             return;
           }
-          if (!window.confirm("Gerar uma nova escala para os próximos seis meses? As equipes atuais desse período serão substituídas.")) return;
+          if (!window.confirm("Gerar uma nova escala para o próximo ano? As equipes atuais desse período serão substituídas.")) return;
           const masses = createUpcomingMasses(state.settings);
           const notesByDate = new Map(state.masses.filter(mass => mass.note).map(mass => [mass.date, mass.note]));
-          const confirmationsByDateTime = new Map(state.masses.map(mass => [`${mass.date}T${mass.time}`, mass.confirmed === true]));
           const firstAssignments = state.initialOrderApplied
             ? null
             : generatePdfFirstAssignments(masses, activeMembers);
@@ -936,7 +1158,6 @@
           state.masses = masses.map((mass, index) => ({
             ...mass,
             note: notesByDate.get(mass.date) || "",
-            confirmed: confirmationsByDateTime.get(`${mass.date}T${mass.time}`) === true,
             assignments: assignments[index]
           }));
           state.initialOrderApplied = true;
