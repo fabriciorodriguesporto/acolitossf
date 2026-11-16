@@ -3,21 +3,21 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#f5f6f3">
+  <meta name="theme-color" content="#F9FAFB">
   <title>Acólitos São Francisco</title>
   <style>
     :root {
       color-scheme: light;
-      --ink: #202b26;
-      --muted: #6b756f;
-      --line: #e2e7e2;
-      --paper: #fff;
-      --page: #f5f6f3;
-      --green: #355b48;
-      --green-dark: #294638;
-      --green-soft: #edf3ee;
-      --amber: #f6f1e7;
-      --danger: #a53d35;
+      --ink: #1F2937;
+      --muted: rgba(31,41,55,.68);
+      --line: rgba(30,58,138,.14);
+      --paper: #F9FAFB;
+      --page: #F9FAFB;
+      --primary: #1E3A8A;
+      --primary-soft: rgba(30,58,138,.08);
+      --accent: #D97706;
+      --accent-soft: rgba(217,119,6,.12);
+      --danger: #1F2937;
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       font-synthesis: none;
       text-rendering: optimizeLegibility;
@@ -38,12 +38,12 @@
       transition: background-color .18s ease, color .18s ease, border-color .18s ease, box-shadow .18s ease;
     }
     button:active {
-      background-color: #dbeafe !important;
-      border-color: #60a5fa !important;
-      color: #1d4ed8 !important;
-      box-shadow: 0 0 0 3px rgba(59,130,246,.16);
+      background-color: var(--primary) !important;
+      border-color: var(--primary) !important;
+      color: #fff !important;
+      box-shadow: 0 0 0 3px var(--primary-soft);
     }
-    button:focus-visible { outline: 2px solid #60a5fa; outline-offset: 2px; }
+    button:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
     @media (prefers-reduced-motion: reduce) {
       button { transition: none; }
     }
@@ -61,48 +61,57 @@
 
     .brand { display: flex; align-items: center; gap: 13px; }
     .brand-logo { width: 44px; height: 56px; flex: 0 0 auto; object-fit: cover; border-radius: 50%; }
-    .brand-name { margin: 0; font-size: 19px; font-weight: 650; letter-spacing: -.025em; }
+    .brand-name { margin: 0; color: var(--primary); font-size: 19px; font-weight: 650; letter-spacing: -.025em; }
     .brand-caption { margin: 1px 0 0; color: var(--muted); font-size: 12px; }
 
     .nav { display: flex; gap: 5px; }
     .nav button {
       padding: 9px 14px;
-      color: var(--muted);
+      color: var(--primary);
       background: transparent;
       border: 0;
       border-radius: 8px;
       font-size: 14px;
     }
-    .nav button[aria-current="page"] { color: var(--green-dark); background: var(--green-soft); font-weight: 600; }
+    .nav button[aria-current="page"] { color: var(--primary); background: var(--primary-soft); font-weight: 600; }
 
     main { padding: 32px 0 64px; }
-    .page-heading { margin: 0 0 18px; font-size: 21px; font-weight: 620; letter-spacing: -.025em; }
+    .page-heading { margin: 0 0 18px; color: var(--primary); font-size: 21px; font-weight: 620; letter-spacing: -.025em; }
     .intro { margin: -10px 0 25px; color: var(--muted); font-size: 14px; }
 
     .next-card {
       overflow: hidden;
-      padding: 27px 30px 29px;
+      padding: 28px 30px;
       color: #fff;
-      background: var(--green);
+      background: var(--primary);
       border-radius: 12px;
     }
     .eyebrow { margin: 0 0 12px; font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; opacity: .8; }
     .next-date { margin: 0; font-size: clamp(24px, 4vw, 32px); font-weight: 620; letter-spacing: -.035em; }
-    .next-time { margin: 4px 0 22px; color: #e2ede5; font-size: 15px; }
+    .next-time { margin: 4px 0 22px; color: rgba(249,250,251,.88); font-size: 15px; }
     .team-title { margin: 0 0 11px; font-size: 13px; font-weight: 600; }
-    .team-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(185px, 1fr)); gap: 8px; }
+    .team-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr)); gap: 8px; }
     .team-person {
       display: flex;
+      min-height: 56px;
+      align-items: center;
       justify-content: space-between;
       gap: 12px;
       padding: 10px 12px;
       color: #fff;
-      background: rgba(255,255,255,.1);
+      background: rgba(249,250,251,.12);
       border-radius: 7px;
       font-size: 13px;
     }
-    .team-role { color: #dce8df; text-align: right; }
-    .unassigned { margin: 0; color: #e2ede5; font-size: 14px; }
+    .team-person-identity, .member-identity, .mass-detail-identity { display: flex; align-items: center; gap: 9px; min-width: 0; }
+    .team-person-identity { flex: 1 1 auto; font-weight: 600; }
+    .team-person-identity > span:last-child { overflow-wrap: anywhere; }
+    .profile-avatar { display: grid; flex: 0 0 36px; width: 36px; height: 36px; place-items: center; overflow: hidden; color: var(--primary); background: var(--primary-soft); border-radius: 50%; font-size: 12px; font-weight: 700; }
+    .team-person .profile-avatar { background: var(--page); }
+    .profile-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .profile-avatar-small { flex-basis: 30px; width: 30px; height: 30px; font-size: 10px; }
+    .team-role { flex: 0 0 auto; max-width: 42%; color: rgba(249,250,251,.82); text-align: right; }
+    .unassigned { margin: 0; color: rgba(249,250,251,.88); font-size: 14px; }
 
     .schedule-section { margin-top: 37px; }
     .section-heading {
@@ -112,7 +121,7 @@
       gap: 12px;
       margin-bottom: 13px;
     }
-    .section-heading h2 { margin: 0; font-size: 17px; font-weight: 620; letter-spacing: -.015em; }
+    .section-heading h2 { margin: 0; color: var(--primary); font-size: 17px; font-weight: 620; letter-spacing: -.015em; }
     .section-heading span { color: var(--muted); font-size: 12px; }
     .mass-list { display: grid; gap: 9px; }
     .mass-entry {
@@ -134,17 +143,23 @@
       text-align: left;
       font: inherit;
     }
-    .mass-row:hover { background: #f8faf8; }
-    .mass-row:focus-visible { outline: 2px solid #72917c; outline-offset: -3px; }
-    .mass-date { margin: 0; font-size: 14px; font-weight: 600; }
+    .mass-row:hover { background: var(--primary-soft); }
+    .mass-row:focus-visible { outline: 2px solid var(--primary); outline-offset: -3px; }
+    .mass-date { margin: 0; color: var(--primary); font-size: 14px; font-weight: 600; }
     .mass-meta { display: block; margin: 3px 0 0; color: var(--muted); font-size: 12px; }
-    .expand-indicator { flex: 0 0 9px; width: 9px; height: 9px; margin-right: 3px; border-right: 1.5px solid var(--muted); border-bottom: 1.5px solid var(--muted); transform: rotate(45deg) translateY(-2px); transition: transform .15s ease; }
+    .expand-indicator { flex: 0 0 9px; width: 9px; height: 9px; margin-right: 3px; border-right: 1.5px solid var(--accent); border-bottom: 1.5px solid var(--accent); transform: rotate(45deg) translateY(-2px); transition: transform .15s ease; }
     .mass-row[aria-expanded="true"] .expand-indicator { transform: rotate(225deg) translate(-2px, -1px); }
     .mass-detail { display: grid; gap: 7px; padding: 11px 17px 14px; border-top: 1px solid var(--line); }
     .mass-detail[hidden] { display: none; }
-    .mass-detail-item { display: flex; justify-content: space-between; gap: 12px; font-size: 13px; }
+    .mass-detail-item { display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 13px; }
     .mass-detail-role { color: var(--muted); text-align: right; }
     .mass-detail-empty { margin: 0; color: var(--muted); font-size: 13px; }
+    .note-alert { display: inline-grid; width: 18px; height: 18px; margin-left: 7px; place-items: center; color: var(--ink); background: var(--accent-soft); border-radius: 50%; font-size: 12px; font-weight: 800; vertical-align: middle; }
+    .mass-note { display: flex; align-items: flex-start; gap: 9px; margin: 6px 0 0; padding: 10px 12px; color: var(--ink); background: var(--accent-soft); border-left: 3px solid var(--accent); border-radius: 7px; font-size: 13px; white-space: pre-wrap; overflow-wrap: anywhere; }
+    .mass-note .note-alert { margin-left: 0; }
+    .mass-note p { margin: 0; }
+    .next-card .mass-note { color: #fff; background: rgba(249,250,251,.12); }
+    .next-card .note-alert { flex: 0 0 18px; color: var(--ink); background: var(--accent); }
     .empty-note { margin: 0; padding: 19px; color: var(--muted); background: var(--paper); border: 1px solid var(--line); border-radius: 9px; font-size: 14px; }
 
     .admin-grid { display: grid; gap: 16px; }
@@ -161,44 +176,44 @@
     .admin-heading-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
     .admin-heading-row .page-heading { margin: 0; }
     .admin-heading-row { margin-bottom: 8px; }
-    .panel h2 { margin: 0; font-size: 16px; font-weight: 620; }
+    .panel h2 { margin: 0; color: var(--primary); font-size: 16px; font-weight: 620; }
     .panel-description { margin: 5px 0 17px; color: var(--muted); font-size: 13px; }
     .form-row { display: flex; align-items: end; gap: 9px; }
     .field { display: grid; flex: 1; gap: 6px; min-width: 0; }
-    .field label { color: #4e5952; font-size: 12px; font-weight: 600; }
+    .field label { color: var(--ink); font-size: 12px; font-weight: 600; }
     .field input {
       width: 100%;
       min-height: 41px;
       padding: 9px 11px;
       color: var(--ink);
-      background: #fff;
-      border: 1px solid #d5ddd6;
+      background: var(--paper);
+      border: 1px solid var(--line);
       border-radius: 7px;
       outline: none;
     }
-    .field input:focus { border-color: #72917c; box-shadow: 0 0 0 3px rgba(53,91,72,.1); }
+    .field input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-soft); }
     .button {
       display: inline-flex;
       align-items: center;
       justify-content: center;
       min-height: 40px;
       padding: 8px 13px;
-      color: var(--green-dark);
-      background: #fff;
-      border: 1px solid #cbd6cd;
+      color: var(--primary);
+      background: var(--paper);
+      border: 1px solid var(--line);
       border-radius: 7px;
       font-size: 13px;
       font-weight: 600;
       white-space: nowrap;
     }
-    .button:hover { background: #f7faf7; }
-    .button-primary { color: #fff; background: var(--green); border-color: var(--green); }
-    .button-primary:hover { background: var(--green-dark); }
-    .button-danger { color: var(--danger); border-color: #ead2d0; }
+    .button:hover { background: var(--primary-soft); }
+    .button-primary { color: #fff; background: var(--primary); border-color: var(--primary); }
+    .button-primary:hover { background: var(--primary); }
+    .button-danger { color: var(--danger); border-color: var(--line); }
     .button-small { min-height: 32px; padding: 5px 9px; font-size: 12px; }
     .member-list { display: grid; gap: 7px; margin: 15px 0 0; padding: 0; list-style: none; }
-    .member-item { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 9px 0; border-top: 1px solid #edf0ed; }
-    .member-name { font-size: 14px; }
+    .member-item { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 9px 0; border-top: 1px solid var(--line); }
+    .member-name { overflow: hidden; font-size: 14px; text-overflow: ellipsis; white-space: nowrap; }
     .member-actions { display: flex; gap: 6px; }
     .member-count { color: var(--muted); font-size: 12px; }
     .admin-actions { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-top: 15px; }
@@ -206,17 +221,20 @@
     .admin-events { display: grid; gap: 9px; margin-top: 17px; }
     .admin-event { overflow: hidden; border: 1px solid var(--line); border-radius: 8px; }
     .admin-event-toggle { display: flex; width: 100%; align-items: center; justify-content: space-between; gap: 12px; padding: 13px 14px; color: var(--ink); background: var(--paper); border: 0; text-align: left; font: inherit; }
-    .admin-event-toggle:hover { background: #f8faf8; }
+    .admin-event-toggle:hover { background: var(--primary-soft); }
     .admin-event-summary { min-width: 0; }
     .admin-event-details { padding: 0 14px 14px; }
     .admin-event-details[hidden] { display: none; }
-    .admin-event-name { margin: 0; font-size: 13px; font-weight: 600; }
+    .admin-event-name { margin: 0; color: var(--primary); font-size: 13px; font-weight: 600; }
     .admin-event-form { display: grid; grid-template-columns: repeat(2, minmax(140px, 1fr)); gap: 10px; margin-top: 10px; }
     .admin-event-form input { min-height: 36px; font-size: 13px; }
+    .field textarea { width: 100%; min-height: 82px; padding: 9px 11px; color: var(--ink); background: var(--paper); border: 1px solid var(--line); border-radius: 7px; font: inherit; font-size: 13px; resize: vertical; }
+    .field textarea:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 0 3px var(--primary-soft); }
+    .admin-event-note { grid-column: 1 / -1; }
     .admin-event-assignments { display: grid; grid-column: 1 / -1; gap: 10px; margin-top: 13px; }
     .admin-assignment-row { display: grid; grid-template-columns: minmax(150px, .7fr) minmax(180px, 1fr); gap: 10px; }
-    .admin-assignment-row select { width: 100%; min-height: 36px; padding: 7px 9px; color: var(--ink); background: #fff; border: 1px solid #d5ddd6; border-radius: 7px; font: inherit; font-size: 13px; }
-    .notice { margin: 0 0 16px; padding: 11px 13px; color: #65532e; background: var(--amber); border-radius: 7px; font-size: 13px; }
+    .admin-assignment-row select { width: 100%; min-height: 36px; padding: 7px 9px; color: var(--ink); background: var(--paper); border: 1px solid var(--line); border-radius: 7px; font: inherit; font-size: 13px; }
+    .notice { margin: 0 0 16px; padding: 11px 13px; color: var(--ink); background: var(--accent-soft); border-left: 3px solid var(--accent); border-radius: 7px; font-size: 13px; }
     .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
 
     @media (max-width: 600px) {
@@ -225,7 +243,7 @@
       .nav { width: 100%; }
       .nav button { flex: 1; }
       main { padding-top: 24px; }
-      .next-card { padding: 23px 19px; }
+      .next-card { padding: 24px 20px; }
       .mass-row { align-items: flex-start; padding: 13px; }
       .mass-detail { padding: 10px 13px 12px; }
       .form-row { align-items: stretch; flex-direction: column; }
@@ -336,6 +354,7 @@
             return {
               ...mass,
               massType,
+              note: typeof mass.note === "string" ? mass.note : "",
               assignments: validAssignments ? assignments : []
             };
           }) : [];
@@ -421,6 +440,48 @@
         return state.members.find(member => member.id === memberId);
       }
 
+      function profilePhotoMarkup(member, small = false) {
+        const initials = member.name.trim().split(/\s+/).slice(0, 2).map(part => part[0]).join("").toLocaleUpperCase("pt-BR");
+        const avatarClass = `profile-avatar${small ? " profile-avatar-small" : ""}`;
+        return member.photo
+          ? `<span class="${avatarClass}"><img src="${escapeHtml(member.photo)}" alt="" loading="lazy"></span>`
+          : `<span class="${avatarClass}" aria-hidden="true">${escapeHtml(initials)}</span>`;
+      }
+
+      function noteAlertMarkup(note) {
+        return note
+          ? `<span class="note-alert" role="img" aria-label="Esta missa tem uma observação" title="Esta missa tem uma observação">!</span>`
+          : "";
+      }
+
+      function massNoteMarkup(note) {
+        return note
+          ? `<div class="mass-note"><span class="note-alert" aria-hidden="true">!</span><p><strong>Observação:</strong> ${escapeHtml(note)}</p></div>`
+          : "";
+      }
+
+      async function resizeProfilePhoto(file) {
+        if (!file) return "";
+        if (!file.type.startsWith("image/")) throw new Error("Selecione um arquivo de imagem.");
+        if (file.size > 5 * 1024 * 1024) throw new Error("A foto deve ter no máximo 5 MB.");
+        if (typeof createImageBitmap !== "function") throw new Error("Este navegador não oferece suporte ao envio de fotos.");
+
+        const image = await createImageBitmap(file);
+        try {
+          const maxDimension = 256;
+          const scale = Math.min(1, maxDimension / Math.max(image.width, image.height));
+          const canvas = document.createElement("canvas");
+          canvas.width = Math.max(1, Math.round(image.width * scale));
+          canvas.height = Math.max(1, Math.round(image.height * scale));
+          canvas.getContext("2d").drawImage(image, 0, 0, canvas.width, canvas.height);
+          const photo = canvas.toDataURL("image/jpeg", 0.75);
+          if (photo.length > 150000) throw new Error("Não foi possível reduzir a foto o suficiente. Escolha uma imagem mais simples.");
+          return photo;
+        } finally {
+          image.close();
+        }
+      }
+
       function renderHome() {
         const events = futureMasses();
         const next = events[0];
@@ -430,11 +491,12 @@
               <p class="eyebrow">Próxima missa</p>
               <h1 class="next-date" id="next-heading">${escapeHtml(formatDate(next.date, { weekday: "long", day: "numeric", month: "long" }))}</h1>
               <p class="next-time">${escapeHtml(next.time)} · Comunidade São Francisco</p>
+              ${massNoteMarkup(next.note)}
               <p class="team-title">Equipe escalada</p>
               ${assignments.length
                 ? `<div class="team-list">${assignments.map(item => {
                     const member = getMember(item.memberId);
-                    return member ? `<div class="team-person"><span>${escapeHtml(member.name)}</span><span class="team-role">${escapeHtml(item.role)}</span></div>` : "";
+                return member ? `<div class="team-person"><span class="team-person-identity">${profilePhotoMarkup(member)}<span>${escapeHtml(member.name)}</span></span><span class="team-role">${escapeHtml(item.role)}</span></div>` : "";
                   }).join("")}</div>`
                 : `<p class="unassigned">Ainda não há equipe definida. A escala será exibida aqui após a geração pelo administrador.</p>`}
             </section>`
@@ -443,16 +505,17 @@
           const details = (mass.assignments || []).map(item => {
             const member = getMember(item.memberId);
             return member
-              ? `<div class="mass-detail-item"><span>${escapeHtml(member.name)}</span><span class="mass-detail-role">${escapeHtml(item.role)}</span></div>`
+              ? `<div class="mass-detail-item"><span class="mass-detail-identity">${profilePhotoMarkup(member, true)}<span>${escapeHtml(member.name)}</span></span><span class="mass-detail-role">${escapeHtml(item.role)}</span></div>`
               : "";
           }).join("");
+          const note = massNoteMarkup(mass.note);
           const detailId = `mass-detail-${mass.id}`;
           return `<div class="mass-entry">
             <button class="mass-row" type="button" data-toggle-mass aria-expanded="false" aria-controls="${escapeHtml(detailId)}">
-              <span><span class="mass-date">${escapeHtml(formatDate(mass.date, { weekday: "long", day: "numeric", month: "long" }))}</span><span class="mass-meta">Missa · ${escapeHtml(mass.time)}</span></span>
+              <span><span class="mass-date">${escapeHtml(formatDate(mass.date, { weekday: "long", day: "numeric", month: "long" }))}${noteAlertMarkup(mass.note)}</span><span class="mass-meta">Missa · ${escapeHtml(mass.time)}</span></span>
               <span class="expand-indicator" aria-hidden="true"></span>
             </button>
-            <div class="mass-detail" id="${escapeHtml(detailId)}" hidden>${details || `<p class="mass-detail-empty">Equipe a definir</p>`}</div>
+            <div class="mass-detail" id="${escapeHtml(detailId)}" hidden>${note}${details || `<p class="mass-detail-empty">Equipe a definir</p>`}</div>
           </div>`;
         }).join("");
 
@@ -469,7 +532,7 @@
         const members = [...state.members].sort((a, b) => a.name.localeCompare(b.name, "pt-BR"));
         const memberRows = members.length
           ? members.map(member => `<li class="member-item">
-              <span class="member-name">${escapeHtml(member.name)}</span>
+              <span class="member-identity">${profilePhotoMarkup(member)}<span class="member-name">${escapeHtml(member.name)}</span></span>
               <div class="member-actions">
                 <button class="button button-small" type="button" data-edit-member="${escapeHtml(member.id)}">Editar</button>
                 <button class="button button-small button-danger" type="button" data-delete-member="${escapeHtml(member.id)}">Excluir</button>
@@ -493,13 +556,14 @@
             const detailsId = `admin-mass-details-${mass.id}`;
             return `<article class="admin-event">
               <button class="admin-event-toggle" type="button" data-toggle-admin-mass aria-expanded="false" aria-controls="${escapeHtml(detailsId)}">
-                <span class="admin-event-summary"><span class="admin-event-name">${escapeHtml(formatDate(mass.date, { weekday: "long", day: "numeric", month: "long" }))}</span><span class="mass-meta">Missa · ${escapeHtml(mass.time)}</span></span>
+                <span class="admin-event-summary"><span class="admin-event-name">${escapeHtml(formatDate(mass.date, { weekday: "long", day: "numeric", month: "long" }))}${noteAlertMarkup(mass.note)}</span><span class="mass-meta">Missa · ${escapeHtml(mass.time)}</span></span>
                 <span class="expand-indicator" aria-hidden="true"></span>
               </button>
               <div class="admin-event-details" id="${escapeHtml(detailsId)}" hidden>
                 <form class="admin-event-form" data-event-form="${escapeHtml(mass.id)}">
                   <div class="field"><label for="date-${escapeHtml(mass.id)}">Data</label><input id="date-${escapeHtml(mass.id)}" name="date" type="date" value="${escapeHtml(mass.date)}" required></div>
                   <div class="field"><label for="time-${escapeHtml(mass.id)}">Horário</label><input id="time-${escapeHtml(mass.id)}" name="time" type="time" value="${escapeHtml(mass.time)}" required></div>
+                  <div class="field admin-event-note"><label for="note-${escapeHtml(mass.id)}">Observação (opcional)</label><textarea id="note-${escapeHtml(mass.id)}" name="note" maxlength="500" rows="3" placeholder="Ex.: chegar 15 minutos antes">${escapeHtml(mass.note || "")}</textarea></div>
                   <div class="admin-event-assignments">${assignmentFields}</div>
                   <button class="button button-small" type="submit">Salvar alteração</button>
                 </form>
@@ -516,6 +580,7 @@
               <p class="panel-description">Cadastre e mantenha atualizada a lista de pessoas disponíveis para servir.</p>
               <form class="form-row" id="member-form">
                 <div class="field"><label for="member-name">Nome do acólito</label><input id="member-name" name="name" type="text" maxlength="70" placeholder="Ex.: Maria da Silva" required></div>
+                <div class="field"><label for="member-photo">Foto de perfil (opcional)</label><input id="member-photo" name="photo" type="file" accept="image/*"></div>
                 <button class="button button-primary" type="submit">Adicionar acólito</button>
               </form>
               <ul class="member-list">${memberRows}</ul>
@@ -689,7 +754,7 @@
         app.focus();
       }));
 
-      app.addEventListener("submit", event => {
+      app.addEventListener("submit", async event => {
         event.preventDefault();
         const form = event.target;
         if (form.id === "login-form") {
@@ -715,8 +780,18 @@
             window.alert("Esse acólito já está cadastrado.");
             return;
           }
-          state.members.push({ id: newId(), name });
-          saveState();
+          let photo;
+          try {
+            photo = await resizeProfilePhoto(form.elements.photo.files[0]);
+          } catch (error) {
+            window.alert(error.message || "Não foi possível carregar a foto selecionada.");
+            return;
+          }
+          state.members.push({ id: newId(), name, ...(photo ? { photo } : {}) });
+          if (!saveState()) {
+            state.members.pop();
+            return;
+          }
           render();
         } else if (form.matches("[data-event-form]")) {
           const mass = state.masses.find(item => item.id === form.dataset.eventForm);
@@ -749,6 +824,7 @@
           }
           mass.date = date;
           mass.time = time;
+          mass.note = String(form.elements.note.value).trim().slice(0, 500);
           mass.assignments = assignments;
           state.masses.sort((a, b) => `${a.date}T${a.time}`.localeCompare(`${b.date}T${b.time}`));
           saveState();
@@ -829,11 +905,16 @@
           }
           if (!window.confirm("Gerar uma nova escala para os próximos seis meses? As equipes atuais desse período serão substituídas.")) return;
           const masses = createUpcomingMasses(state.settings);
+          const notesByDate = new Map(state.masses.filter(mass => mass.note).map(mass => [mass.date, mass.note]));
           const firstAssignments = state.initialOrderApplied
             ? null
             : generatePdfFirstAssignments(masses, activeMembers);
           const assignments = firstAssignments || generateAssignments(masses, activeMembers);
-          state.masses = masses.map((mass, index) => ({ ...mass, assignments: assignments[index] }));
+          state.masses = masses.map((mass, index) => ({
+            ...mass,
+            note: notesByDate.get(mass.date) || "",
+            assignments: assignments[index]
+          }));
           state.initialOrderApplied = true;
           saveState();
           render();
