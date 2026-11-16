@@ -20,6 +20,8 @@ Na área **Administrador**, cadastre os acólitos e gere a escala dos próximos 
 
 Na seção de datas e horários, cada missa pode ser ajustada individualmente: data, horário, acólitos e funções. A geração tenta variar as equipes, distribuir as presenças e alternar as funções de forma equilibrada. Uma nova geração substitui as escalas existentes para o período.
 
+As datas seguem a previsão do 2º e do 4º sábado do mês. As datas e os horários oficiais são confirmados no início de cada mês; a programação exibe cada missa como **Estimada** ou **Confirmada**.
+
 Também é possível registrar uma observação de até 500 caracteres em cada missa. Quando houver uma, um indicador dourado aparece na programação e o texto fica visível nos detalhes e no destaque da próxima missa. As observações são públicas na página inicial e ficam salvas junto com os dados locais.
 
 Ao adicionar um acólito, também é possível selecionar uma foto de perfil. Ela é reduzida para facilitar o armazenamento e aparece na lista de acólitos, na equipe da próxima missa e nos detalhes das escalas. A foto e os demais dados continuam salvos somente no navegador utilizado; não são sincronizados entre dispositivos.
