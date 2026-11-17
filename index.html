@@ -311,7 +311,7 @@
 
   <script>
     (() => {
-      const STORAGE_KEY = "acolitos-sao-francisco-v1";
+      const LEGACY_STORAGE_KEY = "acolitos-sao-francisco-v1";
       const FIRST_MASS_ROLES = ["Microfone", "Naveta", "Turíbulo"];
       const SECOND_MASS_ROLES = ["Microfone", "Missal"];
       const LEGACY_EXTRA_ROLE = "Acólito extra";
@@ -324,14 +324,12 @@
         { first: [1, 0, 2], second: [0, 2, 1] }
       ];
       const PDF_ROTATION_MEMBER_NAMES = ["amanda", "fabricio", "brenda"];
-      const ADMIN_EMAIL = "admin@acolitos.com";
-      const ADMIN_PASSWORD = "adminacolitos";
-      const ADMIN_SESSION_KEY = "acolitos-admin-authenticated";
       const defaultSettings = { secondSaturdayTime: "18:00", fourthSaturdayTime: "17:00" };
       const app = document.querySelector("#app");
       const navButtons = [...document.querySelectorAll("[data-page]")];
       let currentPage = "home";
-      let isAdminAuthenticated = sessionStorage.getItem(ADMIN_SESSION_KEY) === "true";
+      let isAdminAuthenticated = false;
+      let cloudInitialized = false;
       let photoCrop = null;
       let photoDrag = null;
       let state;
@@ -377,10 +375,8 @@
         return events.sort((a, b) => `${a.date}T${a.time}`.localeCompare(`${b.date}T${b.time}`));
       }
 
-      function loadState() {
-        const stored = localStorage.getItem(STORAGE_KEY);
-        if (stored) {
-          const parsed = JSON.parse(stored);
+      function normalizeState(parsed) {
+        if (parsed && typeof parsed === "object") {
           const settings = { ...defaultSettings, ...(parsed.settings || {}) };
           const members = Array.isArray(parsed.members) ? parsed.members : [];
           const masses = Array.isArray(parsed.masses) ? parsed.masses.map(mass => {
@@ -473,14 +469,100 @@
         });
       }
 
-      function saveState() {
+      async function apiRequest(path, options = {}) {
+        const headers = { ...(options.headers || {}) };
+        if (options.body) headers["Content-Type"] = "application/json";
+        const response = await fetch(path, {
+          ...options,
+          headers,
+          cache: "no-store",
+          credentials: "same-origin"
+        });
+        const payload = await response.json();
+        if (!response.ok) {
+          const error = new Error(payload.error || "A solicitação não pôde ser concluída.");
+          error.status = response.status;
+          throw error;
+        }
+        return payload;
+      }
+
+      async function saveState() {
         try {
-          localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+          await apiRequest("/api/state", { method: "PUT", body: JSON.stringify(state) });
+          cloudInitialized = true;
           return true;
         } catch (error) {
-          console.error("Não foi possível salvar os dados no navegador.", error);
-          window.alert("Não foi possível salvar os dados neste navegador. Verifique o espaço disponível e tente novamente.");
+          console.error("Não foi possível salvar os dados na nuvem.", error);
+          if (error.status === 401) {
+            isAdminAuthenticated = false;
+            if (currentPage === "admin") render();
+          }
+          window.alert(error.status === 401
+            ? "Sua sessão de administrador expirou. Entre novamente para salvar as alterações."
+            : "Não foi possível salvar os dados na nuvem. Verifique a conexão e tente novamente.");
           return false;
+        }
+      }
+
+      async function migrateLegacyState() {
+        if (cloudInitialized) return;
+        const currentState = state;
+        let stored;
+        try {
+          stored = localStorage.getItem(LEGACY_STORAGE_KEY);
+          if (!stored) return;
+          const parsed = JSON.parse(stored);
+          if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) {
+            throw new Error("Os dados locais antigos têm um formato inválido.");
+          }
+          state = normalizeState(parsed);
+        } catch (error) {
+          state = currentState;
+          console.error("Não foi possível ler os dados locais antigos.", error);
+          window.alert("Os dados locais antigos não puderam ser migrados. Eles continuam salvos neste navegador.");
+          return;
+        }
+
+        if (await saveState()) {
+          try {
+            localStorage.removeItem(LEGACY_STORAGE_KEY);
+            window.alert("Os dados salvos anteriormente neste navegador foram migrados para a nuvem.");
+          } catch (error) {
+            console.error("Os dados foram migrados, mas a cópia local antiga não pôde ser removida.", error);
+            window.alert("Os dados foram migrados para a nuvem, mas a cópia antiga continua neste navegador.");
+          }
+        } else {
+          state = currentState;
+        }
+      }
+
+      async function initialize() {
+        app.innerHTML = `<p class="empty-note">Carregando dados...</p>`;
+        navButtons.forEach(button => { button.disabled = true; });
+        let loaded = false;
+        try {
+          const [cloudData, session] = await Promise.all([
+            apiRequest("/api/state"),
+            apiRequest("/api/session")
+          ]);
+          if (!cloudData || !cloudData.state || typeof cloudData.initialized !== "boolean"
+            || !session || typeof session.authenticated !== "boolean") {
+            throw new Error("A API retornou um formato de dados inválido.");
+          }
+          state = normalizeState(cloudData.state);
+          cloudInitialized = cloudData.initialized;
+          isAdminAuthenticated = session.authenticated;
+          render();
+          loaded = true;
+        } catch (error) {
+          console.error("Não foi possível carregar os dados da nuvem.", error);
+          app.innerHTML = `<section class="panel" role="alert">
+            <h1 class="page-heading">Não foi possível carregar os dados</h1>
+            <p>Verifique a configuração do banco e a conexão com a internet; depois, atualize a página.</p>
+          </section>`;
+        } finally {
+          navButtons.forEach(button => { button.disabled = !loaded; });
         }
       }
 
@@ -961,12 +1043,19 @@
         if (form.id === "login-form") {
           const email = String(new FormData(form).get("email")).trim();
           const password = String(new FormData(form).get("password"));
-          if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
+          try {
+            await apiRequest("/api/login", {
+              method: "POST",
+              body: JSON.stringify({ email, password })
+            });
             isAdminAuthenticated = true;
-            sessionStorage.setItem(ADMIN_SESSION_KEY, "true");
+            await migrateLegacyState();
             render();
-          } else {
-            form.querySelector("#login-error").textContent = "Usuário ou senha incorretos.";
+          } catch (error) {
+            console.error("Não foi possível autenticar o administrador.", error);
+            form.querySelector("#login-error").textContent = error.status === 401
+              ? "Usuário ou senha incorretos."
+              : "Não foi possível acessar a área administrativa. Tente novamente.";
             form.elements.password.value = "";
             form.elements.password.focus();
           }
@@ -988,11 +1077,9 @@
             window.alert(error.message || "Não foi possível ajustar a foto selecionada.");
             return;
           }
+          const previousState = JSON.parse(JSON.stringify(state));
           state.members.push({ id: newId(), name, ...(photo ? { photo } : {}) });
-          if (!saveState()) {
-            state.members.pop();
-            return;
-          }
+          if (!await saveState()) { state = previousState; return; }
           closeMemberForm();
           render();
         } else if (form.matches("[data-event-form]")) {
@@ -1051,17 +1138,18 @@
             assignedNames.add(nameKey);
             assignments.push(assignment);
           }
+          const previousState = JSON.parse(JSON.stringify(state));
           mass.date = date;
           mass.time = time;
           mass.note = String(form.elements.note.value).trim().slice(0, 500);
           mass.assignments = assignments;
           state.masses.sort((a, b) => `${a.date}T${a.time}`.localeCompare(`${b.date}T${b.time}`));
-          saveState();
+          if (!await saveState()) { state = previousState; return; }
           render();
         }
       });
 
-      app.addEventListener("click", event => {
+      app.addEventListener("click", async event => {
         if (event.target.closest("[data-select-photo]")) {
           document.querySelector("#member-photo").click();
           return;
@@ -1129,8 +1217,9 @@
             window.alert("Já existe um acólito com esse nome.");
             return;
           }
+          const previousState = JSON.parse(JSON.stringify(state));
           member.name = trimmed;
-          saveState();
+          if (!await saveState()) { state = previousState; return; }
           render();
           return;
         }
@@ -1139,11 +1228,12 @@
         if (deleteButton) {
           const member = getMember(deleteButton.dataset.deleteMember);
           if (!member || !window.confirm(`Excluir ${member.name} da lista de acólitos?`)) return;
+          const previousState = JSON.parse(JSON.stringify(state));
           state.members = state.members.filter(item => item.id !== member.id);
           state.masses.forEach(mass => {
             mass.assignments = (mass.assignments || []).filter(item => item.memberId !== member.id);
           });
-          saveState();
+          if (!await saveState()) { state = previousState; return; }
           render();
           return;
         }
@@ -1161,26 +1251,19 @@
             ? null
             : generatePdfFirstAssignments(masses, activeMembers);
           const assignments = firstAssignments || generateAssignments(masses, activeMembers);
+          const previousState = JSON.parse(JSON.stringify(state));
           state.masses = masses.map((mass, index) => ({
             ...mass,
             note: notesByDate.get(mass.date) || "",
             assignments: assignments[index]
           }));
           state.initialOrderApplied = true;
-          saveState();
+          if (!await saveState()) { state = previousState; return; }
           render();
         }
       });
 
-      try {
-        state = loadState();
-      } catch (error) {
-        console.error("Não foi possível ler os dados salvos.", error);
-        window.alert("Os dados salvos não puderam ser lidos. Uma lista nova será iniciada.");
-        state = { members: [], settings: { ...defaultSettings }, masses: [], initialOrderApplied: false };
-        state.masses = createUpcomingMasses(state.settings);
-      }
-      render();
+      initialize();
     })();
   </script>
 </body>
